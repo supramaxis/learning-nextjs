@@ -38,7 +38,7 @@ export const getGiveaways = async () => {
     const options = {
       method: 'GET',
       headers: {
-        'X-RapidAPI-Key': import.meta.env.VITE_RAPIDAPI_KEY,
+        'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPIDADPI_KEY,
         'X-RapidAPI-Host': 'gamerpower.p.rapidapi.com'
       }
     };
@@ -99,18 +99,18 @@ export const getAnimeData = async anm => {
   }
 };
 
-export const fetchItems = async () => {
-  try {
-    const BASE_URL = import.meta.env.VITE_SUPABASE_REST_URL;
-    const TABLE_NAME = 'items';
-    const response = await axios.get(`${BASE_URL}/${TABLE_NAME}?select=*`, {
-      headers: {
-        apikey: import.meta.env.VITE_SUPABASE_APIKEY
-      }
-    });
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
+// export const fetchItems = async () => {
+//   try {
+//     const BASE_URL = import.meta.env.VITE_SUPABASE_REST_URL;
+//     const TABLE_NAME = 'items';
+//     const response = await axios.get(`${BASE_URL}/${TABLE_NAME}?select=*`, {
+//       headers: {
+//         apikey: import.meta.env.VITE_SUPABASE_APIKEY
+//       }
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
