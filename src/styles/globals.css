@@ -1,107 +1,416 @@
-:root {
-  --max-width: 1100px;
-  --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
-
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-
-  --primary-glow: conic-gradient(
-    from 180deg at 50% 50%,
-    #16abff33 0deg,
-    #0885ff33 55deg,
-    #54d6ff33 120deg,
-    #0071ff33 160deg,
-    transparent 360deg
-  );
-  --secondary-glow: radial-gradient(
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 0)
-  );
-
-  --tile-start-rgb: 239, 245, 249;
-  --tile-end-rgb: 228, 232, 233;
-  --tile-border: conic-gradient(
-    #00000080,
-    #00000040,
-    #00000030,
-    #00000020,
-    #00000010,
-    #00000010,
-    #00000080
-  );
-
-  --callout-rgb: 238, 240, 241;
-  --callout-border-rgb: 172, 175, 176;
-  --card-rgb: 180, 185, 188;
-  --card-border-rgb: 131, 134, 135;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-
-    --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
-    --secondary-glow: linear-gradient(
-      to bottom right,
-      rgba(1, 65, 255, 0),
-      rgba(1, 65, 255, 0),
-      rgba(1, 65, 255, 0.3)
-    );
-
-    --tile-start-rgb: 2, 13, 46;
-    --tile-end-rgb: 2, 5, 19;
-    --tile-border: conic-gradient(
-      #ffffff80,
-      #ffffff40,
-      #ffffff30,
-      #ffffff20,
-      #ffffff10,
-      #ffffff10,
-      #ffffff80
-    );
-
-    --callout-rgb: 20, 20, 20;
-    --callout-border-rgb: 108, 108, 108;
-    --card-rgb: 100, 100, 100;
-    --card-border-rgb: 200, 200, 200;
-  }
-}
+@import url('https://use.typekit.net/cdj8bac.css');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  font-family: Itim, sans-serif;
+  font-weight: 700;
+  font-style: normal;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-image: url('/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
 }
 
-a {
-  color: inherit;
+nav {
+  padding: 10px;
+  color: #aef;
+}
+
+.navBtn {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 7px;
+  padding: 5px;
+  border: 1px solid #fff;
+  font-size: 18px;
+}
+
+.list {
+  list-style-type: none;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 100%;
+}
+
+nav ul li {
+  display: inline;
+}
+
+nav ul li .navLinks {
+  color: #000;
   text-decoration: none;
+  padding: 10px;
+  font-size: 20px;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+nav ul li .navLinks:hover {
+  background-color: #000;
+  color: #fff;
+  transition: 0.5s;
+  border-radius: 5px;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 25px;
+  color: #000;
+}
+
+.loading {
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  color: #000;
+}
+
+.category {
+  color: blueviolet;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 25px;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  color: #fd3b6c;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  max-width: 600px;
+  max-height: 600px;
+}
+
+.button-container,
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
+  padding: 5px;
+}
+
+.subtitle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #262626;
+  font-size: 30px;
+  height: 4rem;
+}
+
+@media (max-width: 900px) {
+  .main-container {
+    font-size: 20px;
+  }
+  nav {
+    padding: 5px;
+  }
+  .list {
+    flex-direction: column;
+    font-size: 15px;
+    height: auto;
+  }
+  nav li {
+    margin: 0.8em 0;
+  }
+
+  nav ul .list,
+  .navLinks {
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+  }
+  .navBtn {
+    display: block;
   }
 }
+
+/* SearchBar.jsx */
+
+/* App.js */
+
+.pokeResult {
+  margin: 3px auto auto auto;
+  max-width: 480px;
+  height: 300px;
+  background-color: transparent;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.pokeResult p {
+  margin-left: 10px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pokeImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto auto auto;
+  max-width: 600px;
+  max-height: 600px;
+}
+
+.listedPokemons {
+  display: flex;
+  justify-content: center;
+  margin: 3px auto auto auto;
+  background-color: transparent;
+}
+
+.right-content {
+  width: 50%;
+  text-align: center;
+  color: black;
+  position: fixed;
+  top: 100px;
+  right: 10px;
+}
+.right-content {
+  margin: 1.5rem;
+  height: 160px;
+}
+.right-content h1 {
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Giveaways */
+
+.gvwLinks {
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gvwTitles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+}
+
+.gvwDesc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+
+.gvwInstructions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+
+.gvwAccordion {
+  margin: 120px;
+  padding: 20px;
+}
+
+/* .gvwLinks {
+
+} */
+
+/* pokeList */
+
+/* 404 */
+
+/* Minecraft API */
+
+.stickyth {
+  position: sticky;
+  top: 0;
+}
+
+.mcCard {
+  margin: 5px;
+  padding: 20px;
+}
+
+.mcContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 50px;
+  max-width: 1200px;
+}
+
+.mcAccordion {
+  margin: 120px;
+  padding: 20px;
+}
+
+.accordionBody {
+  padding: 5px !important;
+  margin: 0 !important;
+}
+
+.centeredDiv {
+  display: grid;
+  place-items: center;
+  /* justify-content: center;
+  align-items: center; */
+  margin: 0 auto;
+  /* padding-top: 100px; */
+}
+.label {
+  display: grid;
+  place-items: center;
+}
+
+.centeredP {
+  display: grid;
+  place-items: center;
+}
+
+/* Converter */
+
+/* .converterContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: 50px;
+  max-width: 1200px;
+}
+
+.ConvNotification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 20px;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.convShow {
+  animation: fadeout 10s;
+}
+
+@keyframes fadeout {
+  from {opacity: 1;}
+  to {opacity: 0;}
+} */
+
+/*  FORM  */
+.form {
+  grid-column: 3/4;
+  grid-row: 3/4;
+}
+.form__input {
+  width: 38.7rem;
+  height: 4rem;
+  border: none;
+  border-radius: 1rem;
+  font-size: 1.4rem;
+  padding-left: 1.4rem;
+  box-shadow: inset 0.2rem 0.2rem 0.5rem #c8d0e7,
+    inset -0.2rem -0.2rem 0.5rem #ffffff;
+  background: #c8d0e7;
+  font-family: inherit;
+  color: #000;
+}
+.form__input::-moz-placeholder {
+  color: #000000;
+}
+.form__input:-ms-input-placeholder {
+  color: #000;
+}
+.form__input::placeholder {
+  color: #000000;
+}
+.form__input:focus {
+  outline: none;
+  box-shadow: 0.3rem 0.3rem 0.6rem #c8d0e7, -0.2rem -0.2rem 0.5rem #ffffff;
+}
+
+/*  BUTTON  */
+
+.btn {
+  --primary-light: #8abdff;
+  --primary: #6d5dfc;
+  --primary-dark: #5b0eeb;
+  --white: #ffffff;
+  --greyLight-1: #e4ebf5;
+  --greyLight-2: #c8d0e7;
+  --greyLight-3: #bec8e4;
+  --greyDark: #9baacf;
+  width: 15rem;
+  height: 4rem;
+  border-radius: 1rem;
+  box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
+    -0.2rem -0.2rem 0.5rem var(--white);
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s ease;
+  background: var(--white);
+}
+
+.btn__primary {
+  grid-column: 1/2;
+  grid-row: 4/5;
+  background: var(--white);
+  box-shadow: inset 0.2rem 0.2rem 1rem var(--primary-light),
+    inset -0.2rem -0.2rem 1rem var(--primary-dark),
+    0.3rem 0.3rem 0.6rem var(--greyLight-2), -0.2rem -0.2rem 0.5rem var(--white);
+  color: var(--greyLight-1);
+}
+.btn__primary:hover {
+  color: #ffffff;
+}
+.btn__primary:active {
+  box-shadow: inset 0.2rem 0.2rem 1rem var(--primary-dark),
+    inset -0.2rem -0.2rem 1rem var(--primary-light);
+}
+.btn__secondary {
+  grid-column: 1/2;
+  grid-row: 5/6;
+  color: var(--greyDark);
+}
+
