@@ -7,8 +7,13 @@ const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { url } = body;
-  const shortUrl = Math.random().toString(36).substring(2, 7);
+  const { url, customCode } = body;
+  let shortUrl = customCode;
+
+  if (!shortUrl) {
+    shortUrl = Math.random().toString(36).substring(2, 7);
+  }
+
   try {
     const data = await prisma.url.create({
       data: {
@@ -16,6 +21,8 @@ export async function POST(req: NextRequest) {
         shortUrl
       }
     });
+
+    prisma.$disconnect();
 
     console.log(data);
     return new Response(JSON.stringify(data), {

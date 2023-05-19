@@ -17,12 +17,14 @@ export default function Home() {
   const [shortUrl, setShortUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const customCodeRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
   };
   const handleClick = async () => {
     const url = inputRef.current?.value;
+    const customCode = customCodeRef.current?.value || undefined;
 
     //fetch the api endpoint to create a short url using async await
     const res = await fetch('/api/shorten', {
@@ -30,7 +32,7 @@ export default function Home() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ url })
+      body: JSON.stringify({ url, customCode })
     });
     const data = await res.json();
     setShortUrl(data.shortUrl);
@@ -41,7 +43,9 @@ export default function Home() {
         <Container>
           <FormControl onSubmit={handleSubmit}>
             <FormLabel>Ingresa la URL a acortar</FormLabel>
-            <Input type='url' ref={inputRef} />
+            <Input type='url' ref={inputRef} required />
+            <FormLabel>Código personalizado (opcional)</FormLabel>
+            <Input type='text' ref={customCodeRef} />
             <Button onClick={handleClick} type='submit' mt={4}>
               Acortar
             </Button>
@@ -49,8 +53,8 @@ export default function Home() {
               <>
                 <FormHelperText>URL acortada con éxito</FormHelperText>
                 <FormHelperText>
-                  <Link target='_blank' href={`/${shortUrl}`}>
-                    http://localhost:3000/{shortUrl}
+                  <Link target='_blank' href={`/go/${shortUrl}`}>
+                    http://localhost:3000/go/{shortUrl}
                   </Link>
                 </FormHelperText>
               </>
