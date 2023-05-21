@@ -1,19 +1,16 @@
-'use client';
-
 import clsx from 'clsx';
-import React from 'react';
 
 interface ButtonProps {
   type?: 'button' | 'submit' | 'reset' | undefined;
   fullWidth?: boolean;
-  children: React.ReactNode;
-  onClick?: () => void;
+  children?: React.ReactNode;
+  onClick?: () => void | undefined;
   secondary?: boolean;
   danger?: boolean;
   disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({
+const LoginButton: React.FC<ButtonProps> = ({
   type = 'button',
   fullWidth,
   children,
@@ -55,5 +52,5 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
+export default LoginButton;
 

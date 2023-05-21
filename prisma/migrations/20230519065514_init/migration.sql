@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "access_token" TEXT,
+ALTER COLUMN "userId" DROP NOT NULL,
+ALTER COLUMN "type" DROP NOT NULL,
+ALTER COLUMN "provider" DROP NOT NULL,
+ALTER COLUMN "providerAccountId" DROP NOT NULL;
