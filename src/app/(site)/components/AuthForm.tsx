@@ -1,14 +1,29 @@
-import Button from '@/app/components/Button';
+import LoginButton from '@/app/components/Button';
 import Input from '@/app/components/inputs/Input';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import AuthSocialButton from './AuthSocialButton';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { signIn, useSession } from 'next-auth/react';
+import { Button, useColorMode } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 
 type Variant = 'login' | 'register';
 const AuthForm = () => {
+  const session = useSession();
+  const router = useRouter();
   const [variant, setVariant] = useState<Variant>('login');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (session?.status === 'authenticated') {
+      // toast.success(`Bienvenido ${session.data.user.name}`);
+      console.log(' authenticated');
+      router.push('/users');
+    }
+  }, [session?.status, router]);
 
   const toggleVariant = useCallback(() => {
     if (variant === 'login') {
@@ -24,7 +39,7 @@ const AuthForm = () => {
     formState: { errors }
   } = useForm<FieldValues>({
     defaultValues: {
-      username: '',
+      name: '',
       email: '',
       password: ''
     }
@@ -34,23 +49,60 @@ const AuthForm = () => {
     setIsLoading(true);
     if (variant === 'register') {
       // login axios
+      try {
+        const res = await axios.post('/api/register', data);
+        console.log(res.data);
+        signIn('credentials', data);
+      } catch (error) {
+        toast.error('algo salio mal');
+      } finally {
+        setIsLoading(false);
+      }
     }
     if (variant === 'login') {
+      signIn('credentials', {
+        ...data,
+        redirect: false
+      })
+        .then(callback => {
+          if (callback?.error) {
+            toast.error('Credenciales incorrectas');
+          }
+
+          if (callback?.ok && !callback?.error) {
+            toast.success('Bienvenido');
+          }
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
       // register nextauth
     }
-    console.log(data);
     setIsLoading(false);
   };
 
   const socialAction = (action: string) => {
     setIsLoading(true);
 
+    signIn(action, { redirect: false })
+      .then(callback => {
+        if (callback?.error) {
+          toast.error('Credenciales invalidas');
+        }
+        if (callback?.ok && !callback?.error) {
+          toast.success('Bienvenido!');
+        }
+      })
+      .finally(() => setIsLoading(false));
+    console.log('click');
     //nextauth social login
+
+    // TODO: google login
   };
   return (
     <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
       <div
-        className='bg-white
+        className='bg-gray-800
          px-4
           py-8
           shadow
@@ -60,7 +112,7 @@ const AuthForm = () => {
           {variant === 'register' && (
             <Input
               id='name'
-              label='Name'
+              label='Nombre'
               register={register}
               errors={errors}
               disabled={isLoading}
@@ -83,9 +135,9 @@ const AuthForm = () => {
             disabled={isLoading}
           />
           <div>
-            <Button disabled={isLoading} fullWidth type='submit'>
+            <LoginButton disabled={isLoading} fullWidth type='submit'>
               {variant === 'login' ? 'Inicia Sesion' : 'Registrate'}
-            </Button>
+            </LoginButton>
           </div>
         </form>
         <div className='mt-6'>
@@ -100,7 +152,7 @@ const AuthForm = () => {
               <div className='w-full border-t border-gray-300' />
             </div>
             <div className='relative flex justify-center text-sm'>
-              <span className='px-2 text-gray-500 bg-white'>
+              <span className='px-2 text-white bg-gray-800'>
                 O inicia sesion con
               </span>
             </div>
