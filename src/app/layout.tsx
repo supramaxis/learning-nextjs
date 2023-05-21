@@ -1,8 +1,8 @@
+import { ColorModeScript } from '@chakra-ui/react';
 import { Providers } from './Providers';
+import ToasterContext from './context/ToasterContext';
 import './globals.css';
-import { Inter } from 'next/font/google';
-
-const inter = Inter({ subsets: ['latin'] });
+import AuthContext from './context/AuthContext';
 
 export const metadata = {
   title: 'Create Next App',
@@ -16,9 +16,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <Providers>
-        <body className={inter.className}>{children}</body>
-      </Providers>
+      <body>
+        <Providers>
+          <AuthContext>
+            <ToasterContext />
+            {children}
+          </AuthContext>
+        </Providers>
+      </body>
     </html>
   );
 }

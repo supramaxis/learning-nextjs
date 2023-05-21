@@ -16,7 +16,7 @@ const Login = () => {
       py-12
       sm:px-6
       lg:px-8
-      bg-white
+      bg-gray-700
       '>
         <h2 className='mt-6 text-center text-3xl fond-bold tracking-tight text-gray-900'>
           Inicia Sesion!
