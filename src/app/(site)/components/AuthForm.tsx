@@ -1,5 +1,5 @@
-import LoginButton from '@/app/components/Button';
-import Input from '@/app/components/inputs/Input';
+import LoginButton from '@/components/Button';
+import Input from '@/components/inputs/Input';
 import { useCallback, useEffect, useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import AuthSocialButton from './AuthSocialButton';
@@ -7,7 +7,6 @@ import { BsGithub, BsGoogle } from 'react-icons/bs';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { signIn, useSession } from 'next-auth/react';
-import { Button, useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 
 type Variant = 'login' | 'register';
@@ -19,11 +18,16 @@ const AuthForm = () => {
 
   useEffect(() => {
     if (session?.status === 'authenticated') {
-      // toast.success(`Bienvenido ${session.data.user.name}`);
-      console.log(' authenticated');
-      router.push('/users');
+      toast.success(`Bienvenido ${session.data.user.name} `);
+      router.push('/');
+    } else {
+      toast.error('Debes iniciar sesion primero');
+      session?.status == 'unauthenticated' ? router.push('/login') : null;
     }
+    console.log(session?.status);
   }, [session?.status, router]);
+
+  //push the user to login page if he is not authenticated
 
   const toggleVariant = useCallback(() => {
     if (variant === 'login') {
@@ -70,7 +74,6 @@ const AuthForm = () => {
           }
 
           if (callback?.ok && !callback?.error) {
-            toast.success('Bienvenido');
           }
         })
         .finally(() => {
@@ -96,8 +99,6 @@ const AuthForm = () => {
       .finally(() => setIsLoading(false));
     console.log('click');
     //nextauth social login
-
-    // TODO: google login
   };
   return (
     <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>

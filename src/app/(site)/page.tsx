@@ -1,31 +1,41 @@
 'use client';
+import { Box, Center, Container } from '@chakra-ui/react';
 
-import AuthForm from '../(site)/components/AuthForm';
+import { useContext, useEffect } from 'react';
+import UrlsModal from '@/components/UrlsModal';
+import UrlsTable from '@/components/UrlsTable';
+import UrlsContext from '@/context/UrlsContext';
+import SignOut from '@/components/SignOut';
+import { useSession } from 'next-auth/react';
+import { redirect, useRouter } from 'next/navigation';
 
-// authform for login and register
+export default function Shorten() {
+  const { data, error } = useContext(UrlsContext);
+  const { data: session } = useSession();
+  const router = useRouter();
 
-const Login = () => {
+  if (!session?.user.email) {
+    router.push('/login');
+  }
+
+  let content;
+  if (data === undefined) {
+    content = <Center>loading...</Center>;
+  } else if (data.length === 0) {
+    content = <Center>No hay links para mostrar. Crea algunos</Center>;
+  } else {
+    content = <UrlsTable />;
+  }
+
   return (
-    <div>
-      <div
-        className='
-      flex
-      min-h-full
-      flex-col
-      justify-center
-      py-12
-      sm:px-6
-      lg:px-8
-      bg-gray-700
-      '>
-        <h2 className='mt-6 text-center text-3xl fond-bold tracking-tight text-gray-900'>
-          Inicia Sesion!
-        </h2>
-      </div>
-      <AuthForm />
-    </div>
-  );
-};
+    <>
+      <UrlsModal />
+      {/* TODO: make the api endpoint /api/urls accessible from all components */}
 
-export default Login;
+      {content}
+
+      <SignOut />
+    </>
+  );
+}
 
