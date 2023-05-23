@@ -1,20 +1,8 @@
+// components/TableContainer.tsx
 'use client';
-
 import {
-  Button,
+  Box,
   Center,
-  Container,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Table,
   TableCaption,
   TableContainer,
@@ -22,32 +10,61 @@ import {
   Td,
   Th,
   Thead,
-  Tr,
-  useDisclosure
+  Tr
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { useState, useRef, useEffect } from 'react';
+import UrlsContext from '@/context/UrlsContext';
+import { useContext } from 'react';
 import { useSession } from 'next-auth/react';
+import useSWR from 'swr';
 
-export type UrlObj = {
+interface DataItem {
   id: number;
+  url: string;
   shortUrl: string;
+  customCode: string | null;
   createdAt: string;
-};
-
-interface UrlsTableProps {
-  someUserUrls: UrlObj[];
-  setSomeUserUrls: React.Dispatch<React.SetStateAction<UrlObj[]>>;
+  userId: string;
 }
 
-const UrlsTable: React.FC<UrlsTableProps> = ({
-  someUserUrls,
-  setSomeUserUrls
-}) => {
-  // const [someUserUrls, setSomeUserUrls] = useState([]);
-  const { data: session, status } = useSession();
+const UrlsTable: React.FC = () => {
+  const { data, error } = useContext(UrlsContext);
+  // const { data, error } = useSWR<DataItem[]>('/api/urls', fetcher);
+  const { data: session } = useSession();
 
-  return <></>;
+  if (error) return <Center>loading ...</Center>;
+  if (!data) return <Center>loading...</Center>;
+
+  return (
+    <TableContainer>
+      <Table variant='simple' size={'md'}>
+        <TableCaption>
+          Hola {session?.user.name} estos son tus links
+        </TableCaption>
+
+        <Thead>
+          <Tr>
+            <Th isNumeric>Link number</Th>
+            <Th>ShortUrl</Th>
+            <Th>Created At</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {data.map((urlObj: DataItem) => (
+            <Tr key={urlObj.id}>
+              <Td>{urlObj.id}</Td>
+              <Td>
+                <Link href={`/go/${urlObj.shortUrl}`} target='_blank'>
+                  http://localhost:3000/go/{urlObj.shortUrl}
+                </Link>
+              </Td>
+              <Td>{urlObj.createdAt}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </TableContainer>
+  );
 };
 
 export default UrlsTable;

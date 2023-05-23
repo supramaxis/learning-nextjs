@@ -3,6 +3,7 @@ import { Providers } from './Providers';
 import ToasterContext from './context/ToasterContext';
 import './globals.css';
 import AuthContext from './context/AuthContext';
+import { UrlsContextProvider } from './context/UrlsContext';
 
 export const metadata = {
   title: 'Create Next App',
@@ -19,8 +20,10 @@ export default function RootLayout({
       <body>
         <Providers>
           <AuthContext>
-            <ToasterContext />
-            {children}
+            <UrlsContextProvider>
+              <ToasterContext />
+              {children}
+            </UrlsContextProvider>
           </AuthContext>
         </Providers>
       </body>
