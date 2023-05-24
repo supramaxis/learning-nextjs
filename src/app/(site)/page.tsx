@@ -24,9 +24,9 @@ export default function Shorten() {
     setUrls([...urls, url]);
   };
 
-  if (!session?.user.email) {
-    router.push('/login');
-  }
+  useEffect(() => {
+    if (!session?.user.email) router.push('/login');
+  }, [session]);
 
   let content;
   if (data === undefined) {
