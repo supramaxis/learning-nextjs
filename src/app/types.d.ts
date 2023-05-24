@@ -51,5 +51,7 @@ export type UrlsContextType = {
   fetcher: (url: any) => void;
   data: DataItem[] | undefined;
   error: Error | undefined;
+  setUrls: (urls: Url[]) => void;
+  handleUrlDeleted: (deletedId: number) => void; // Add handleUrlDeleted function
 };
 
