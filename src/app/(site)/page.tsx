@@ -30,7 +30,11 @@ export default function Shorten() {
 
   let content;
   if (data === undefined) {
-    content = <Center>loading...</Center>;
+    content = (
+      <Center>
+        <h3>Loading...</h3>
+      </Center>
+    );
   } else if (data.length === 0) {
     content = <Center>No hay links para mostrar. Crea algunos</Center>;
   } else {

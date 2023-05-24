@@ -55,7 +55,7 @@ const AuthForm = () => {
       // login axios
       try {
         const res = await axios.post('/api/register', data);
-        console.log(res.data);
+        // console.log(res.data);
         signIn('credentials', data);
       } catch (error) {
         toast.error('algo salio mal');

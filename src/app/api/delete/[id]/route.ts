@@ -10,7 +10,7 @@ export async function DELETE(
 
   try {
     const currentUser = await getCurrentUser();
-    console.log(currentUser);
+    // console.log(currentUser);
 
     if (!currentUser?.id || !currentUser?.email) {
       return new NextResponse('No autorizado', { status: 401 });
