@@ -4,6 +4,7 @@ import ToasterContext from './context/ToasterContext';
 import './globals.css';
 import AuthContext from './context/AuthContext';
 import { UrlsContextProvider } from './context/UrlsContext';
+import Navbar from './components/Navbar';
 
 export const metadata = {
   title: 'Create Next App',
@@ -21,6 +22,7 @@ export default function RootLayout({
         <Providers>
           <AuthContext>
             <UrlsContextProvider>
+              <Navbar />
               <ToasterContext />
               {children}
             </UrlsContextProvider>

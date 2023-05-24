@@ -17,8 +17,6 @@ export default async function ShortIdPage({ params }: { params: Params }) {
 
   prisma.$disconnect();
 
-  console.log(data);
-
   if (!data) {
     redirect('/');
   } else {

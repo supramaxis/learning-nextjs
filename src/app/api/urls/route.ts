@@ -5,7 +5,7 @@ import getCurrentUser from '@/actions/getCurrentUser';
 export async function GET(req: NextRequest) {
   try {
     const currentUser = await getCurrentUser();
-
+    // console.log(currentUser);
     if (!currentUser?.id || !currentUser?.email) {
       return new NextResponse('No autorizado', { status: 401 });
     }

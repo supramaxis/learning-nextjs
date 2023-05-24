@@ -24,7 +24,7 @@ const AuthForm = () => {
       toast.error('Debes iniciar sesion primero');
       session?.status == 'unauthenticated' ? router.push('/login') : null;
     }
-    console.log(session?.status);
+    // console.log(session?.status);
   }, [session?.status, router]);
 
   //push the user to login page if he is not authenticated
@@ -97,7 +97,6 @@ const AuthForm = () => {
         }
       })
       .finally(() => setIsLoading(false));
-    console.log('click');
     //nextauth social login
   };
   return (
