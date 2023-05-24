@@ -3,7 +3,7 @@ import { Providers } from './Providers';
 import ToasterContext from './context/ToasterContext';
 import './globals.css';
 import AuthContext from './context/AuthContext';
-import { UrlsContextProvider } from './context/UrlsContext';
+import { UrlsContextProvider } from './context/UrlsProvider';
 import Navbar from './components/Navbar';
 
 export const metadata = {

@@ -1,4 +1,4 @@
-// components/TableContainer.tsx
+// components/UrlsTable.tsx
 'use client';
 import {
   Box,
