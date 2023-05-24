@@ -1,18 +1,28 @@
 'use client';
 import { Box, Center, Container } from '@chakra-ui/react';
 
-import { useContext, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import UrlsModal from '@/components/UrlsModal';
 import UrlsTable from '@/components/UrlsTable';
 import UrlsContext from '@/context/UrlsContext';
 import SignOut from '@/components/SignOut';
 import { useSession } from 'next-auth/react';
 import { redirect, useRouter } from 'next/navigation';
+import { DataItem } from '@/types';
 
 export default function Shorten() {
+  const [urls, setUrls] = useState<DataItem[]>([]);
   const { data, error } = useContext(UrlsContext);
   const { data: session } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (data) setUrls(data);
+  }, [data]);
+
+  const handleUrlCreated = (url: DataItem) => {
+    setUrls([...urls, url]);
+  };
 
   if (!session?.user.email) {
     router.push('/login');
@@ -24,16 +34,14 @@ export default function Shorten() {
   } else if (data.length === 0) {
     content = <Center>No hay links para mostrar. Crea algunos</Center>;
   } else {
-    content = <UrlsTable />;
+    content = <UrlsTable data={urls} />;
   }
 
   return (
     <>
-      <UrlsModal />
-      {/* TODO: make the api endpoint /api/urls accessible from all components */}
-
       {content}
 
+      <UrlsModal onUrlCreated={handleUrlCreated} />
       <SignOut />
     </>
   );
