@@ -1,14 +1,6 @@
 'use client';
 import useSWR from 'swr';
-
-interface DataItem {
-  id: number;
-  url: string;
-  shortUrl: string;
-  customCode: string | null;
-  createdAt: string;
-  userId: string;
-}
+import { DataItem } from '@/types';
 
 const fetcher = async (url: string): Promise<DataItem[]> => {
   const res = await fetch(url);
