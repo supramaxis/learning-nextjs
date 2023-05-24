@@ -10,16 +10,20 @@ import {
 import { HamburgerIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 interface DropDownProps {
   id: number;
   onUrlDeleted: () => void;
 }
 
-const DropDown: React.FC<DropDownProps> = (
-  { id }: { id: number },
+const DropDown: React.FC<DropDownProps> = ({
+  id,
   onUrlDeleted
-) => {
+}: {
+  id: number;
+  onUrlDeleted: () => void;
+}) => {
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async () => {
@@ -27,8 +31,9 @@ const DropDown: React.FC<DropDownProps> = (
 
     try {
       const res = await axios.delete(`/api/delete/${id}`);
-      console.log(res.data);
+      
       onUrlDeleted();
+      toast.success('La Url ha sido eliminada');
     } catch (error) {
       console.log(error);
     }
