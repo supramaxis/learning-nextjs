@@ -11,11 +11,9 @@ const SignOut = () => {
   };
 
   return (
-    <Container>
-      <Center h='100px'>
-        <Button onClick={handleSignOut}>Cerrar Sesion</Button>
-      </Center>
-    </Container>
+    <div className='flex items-center justify-center'>
+      <button onClick={handleSignOut}>Cerrar Sesion</button>
+    </div>
   );
 };
 

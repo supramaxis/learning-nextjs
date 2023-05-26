@@ -1,5 +1,3 @@
-import { ColorModeScript } from '@chakra-ui/react';
-import { Providers } from './Providers';
 import ToasterContext from './context/ToasterContext';
 import './globals.css';
 import AuthContext from './context/AuthContext';
@@ -18,16 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body>
-        <Providers>
-          <AuthContext>
-            <UrlsContextProvider>
-              <Navbar />
-              <ToasterContext />
-              {children}
-            </UrlsContextProvider>
-          </AuthContext>
-        </Providers>
+      <body className='bg-gray-800'>
+        <AuthContext>
+          <UrlsContextProvider>
+            <ToasterContext />
+            {children}
+          </UrlsContextProvider>
+        </AuthContext>
       </body>
     </html>
   );
