@@ -30,7 +30,7 @@ export async function DELETE(
     return new NextResponse(null, { status: 204 });
   } catch (error: any) {
     if (error.code === 'P2025') {
-      return new NextResponse('No se encontro a un usuario con ese id', {
+      return new NextResponse('No se encontro una url con ese id', {
         status: 404
       });
     }
