@@ -12,7 +12,7 @@ datasource db {
 
 //url model for the database
 model Url {
-  id         Int      @id @default(autoincrement())
+  id         Int      @id @default(dbgenerated())
   url        String
   shortUrl   String?  @unique
   customCode String?  @unique
