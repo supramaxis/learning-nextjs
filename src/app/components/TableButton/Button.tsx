@@ -1,4 +1,4 @@
-import { classNames } from '@/shared/Utils';
+import { classNames } from '@/lib/utils';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;

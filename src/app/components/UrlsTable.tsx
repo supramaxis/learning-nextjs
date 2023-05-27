@@ -1,15 +1,12 @@
 // components/UrlsTable.tsx
 'use client';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { useSession } from 'next-auth/react';
 import { mutate } from 'swr';
 import { DataItem, UrlsTableProps } from '@/types';
 import { Button, PageButton } from '@/components/TableButton/Button';
 import { Column } from 'react-table';
 import Link from 'next/link';
-import DropDown from './DropDown';
 import UrlsContext from '@/context/UrlsContext';
-import TailwindDropdown from './TailwindDropdown';
 import {
   useTable,
   usePagination,

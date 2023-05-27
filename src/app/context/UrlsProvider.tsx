@@ -1,22 +1,12 @@
 'use client';
 //react context
 
-import { createContext, useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
-import type { DataItem, Url, UrlsContextType } from '@/types';
+import type { DataItem, Url } from '@/types';
 import { UrlsContext } from './UrlsContext';
 
-// const UrlsContext = createContext<UrlsContextType>({
-//   urls: [],
-//   // fetchUrls: () => {},
-//   session: Object,
-//   fetcher: () => {},
-//   data: undefined,
-//   error: undefined,
-//   setUrls: () => null,
-//   handleUrlDeleted: () => null
-// });
 
 const fetcher = async (url: string): Promise<DataItem[]> => {
   const res = await fetch(url);

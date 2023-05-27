@@ -2,26 +2,17 @@
 import React, {
   useRef,
   useState,
-  useEffect,
-  useContext,
   Fragment
 } from 'react';
 
-import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import UrlsContext from '@/context/UrlsContext';
 import { UrlsModalProps } from '@/types';
 import { Dialog, Transition } from '@headlessui/react';
 
 const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
-  const [shortUrl, setShortUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [someUserUrls, setSomeUserUrls] = useState([]);
-  const { data: session, status } = useSession();
-  // const { isOpen, onOpen, onClose } = useDisclosure();
-  // const { fetchUrls } = useContext(UrlsContext);
-
   const inputRef = useRef<HTMLInputElement>(null);
   const customCodeRef = useRef<HTMLInputElement>(null);
 
@@ -46,15 +37,12 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
         body: JSON.stringify({ url, customCode })
       });
       const data = await res.json();
-      setShortUrl(data.shortUrl);
       setLoading(false);
       onUrlCreated(data);
       setIsOpen(false);
     } catch (error) {
       console.log(error);
     }
-
-    // fetchUrls();
   };
 
   function closeModal() {
@@ -74,51 +62,6 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
           Crear Enlaces
         </button>
       </div>
-
-      {/* <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-        <Dialog.Overlay className='fixed inset-0 bg-black opacity-30' />
-        <Dialog.Panel>
-          <div className='flex items-center justify-center min-h-screen'>
-            <Dialog.Title className='text-xl font-bold'>
-              Crear Enlaces
-            </Dialog.Title>
-            <div className='flex flex-col items-center space-y-4'>
-              <label htmlFor='input1' className='sr-only'>
-                Input 1
-              </label>
-              <input
-                type='text'
-                id='input1'
-                ref={inputRef}
-                className='block w-full py-2 px-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500'
-                placeholder='Url Larga'
-              />
-              <label htmlFor='input2' className='sr-only'>
-                Input 2
-              </label>
-              <input
-                type='text'
-                id='input2'
-                ref={customCodeRef}
-                className='block w-full py-2 px-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500'
-                placeholder='codigo opcional'
-              />
-            </div>
-            <div className='flex justify-end space-x-2'>
-              <button
-                className='bg-indigo-500 text-white px-4 py-2 rounded'
-                onClick={handleClick}>
-                Acortar
-              </button>
-              <button
-                className='bg-red-500 text-white px-4 py-2'
-                onClick={() => setIsOpen(false)}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </Dialog.Panel>
-      </Dialog> */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as='div' className='relative z-10' onClose={closeModal}>
           <Transition.Child

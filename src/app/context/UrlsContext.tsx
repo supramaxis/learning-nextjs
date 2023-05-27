@@ -2,7 +2,7 @@
 // context/UrlsContext.tsx
 
 import { createContext } from 'react';
-import { DataItem, UrlsContextType } from '@/types';
+import { UrlsContextType } from '@/types';
 
 export const UrlsContext = createContext<UrlsContextType>({
   urls: [],

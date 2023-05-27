@@ -24,7 +24,6 @@ const AuthForm = () => {
       toast.error('Debes iniciar sesion primero');
       session?.status == 'unauthenticated' ? router.push('/login') : null;
     }
-    // console.log(session?.status);
   }, [session?.status, router]);
 
   //push the user to login page if he is not authenticated
@@ -55,7 +54,6 @@ const AuthForm = () => {
       // login axios
       try {
         const res = await axios.post('/api/register', data);
-        // console.log(res.data);
         signIn('credentials', data);
       } catch (error) {
         toast.error('algo salio mal');
