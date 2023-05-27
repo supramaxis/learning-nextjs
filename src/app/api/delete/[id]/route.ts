@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/libs/prismadb';
+import prisma from '@/lib/prismadb';
 import getCurrentUser from '@/actions/getCurrentUser';
 
 export async function DELETE(
   request: Request,
   { params }: { params: { id: number } }
 ) {
-  // const session = await getSession();
 
   try {
     const currentUser = await getCurrentUser();
-    // console.log(currentUser);
 
     if (!currentUser?.id || !currentUser?.email) {
       return new NextResponse('No autorizado', { status: 401 });

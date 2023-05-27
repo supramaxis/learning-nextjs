@@ -1,11 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/libs/prismadb';
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prismadb';
 import getCurrentUser from '@/actions/getCurrentUser';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const currentUser = await getCurrentUser();
-    // console.log(currentUser);
     if (!currentUser?.id || !currentUser?.email) {
       return new NextResponse('No autorizado', { status: 401 });
     }

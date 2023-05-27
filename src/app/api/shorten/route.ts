@@ -1,7 +1,7 @@
 //api endpoint to get a short url from a long url using prisma mongodb
 
 import { NextRequest } from 'next/server';
-import prisma from '@/libs/prismadb';
+import prisma from '@/lib/prismadb';
 import getSession from '@/actions/getSession';
 
 export async function POST(req: NextRequest) {
