@@ -66,9 +66,7 @@ export function DataTable<Tdata, TValue>({
     table.getColumn('shortUrl')?.setFilterValue(e.target.value);
   }
 
-  const filterInputValue = useMemo(() => {
-    return (table.getColumn('shortUrl')?.getFilterValue() as string) ?? '';
-  }, [table]);
+  const filterInputValue = (table.getColumn("shortUrl")?.getFilterValue() as string) ?? ""
 
 
   return (
