@@ -69,6 +69,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
         >
           Crear Enlaces
         </button>
+
       </div>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -116,20 +117,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
                         className="input input-bordered w-full max-w-xs bg-slate-200"
                         required
                         pattern='^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'
-                        onBlur={(e) => {
-                          if (e.target.value.trim() === "") {
-                            e.target.setCustomValidity("URL is required");
-                            e.target.reportValidity();
-                          } else {
-                            e.target.setCustomValidity("");
-                          }
-                        }}
                       />
-                      {inputRef.current?.value.trim() === "" && (
-                        <p className="text-red-500 text-xs mt-1">
-                          URL is required
-                        </p>
-                      )}
                     </div>
                     <div className="form-control w-full max-w-xs">
                       <label className="label">
