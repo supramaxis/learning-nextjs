@@ -108,7 +108,7 @@ export const columns: ColumnDef<DataItem>[] = [
           <DropdownMenuContent align='end'>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
-            <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
+            <DropdownMenuItem className='cursor-pointer' onClick={handleDelete}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
