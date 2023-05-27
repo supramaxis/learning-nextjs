@@ -1,22 +1,25 @@
+// shorten.tsx
 'use client';
-
 import { useContext, useState, useEffect } from 'react';
 import UrlsModal from '@/components/UrlsModal';
-import UrlsTable from '@/components/UrlsTable';
 import UrlsContext from '@/context/UrlsContext';
 import SignOut from '@/components/SignOut';
 import { useSession } from 'next-auth/react';
-import { redirect, useRouter } from 'next/navigation';
+import {  useRouter } from 'next/navigation';
 import { DataItem } from '@/types';
 import { DataTable } from '@/components/DataTable';
 import { columns } from '@/(site)/columns';
 import { toast } from 'react-hot-toast';
 
+
 export default function Shorten() {
   const [urls, setUrls] = useState<DataItem[]>([]);
+
   const { data, error } = useContext(UrlsContext);
   const { data: session } = useSession();
   const router = useRouter();
+
+  if (error) return <div>{toast.error(error.message)}</div>;
 
   useEffect(() => {
     if (data) setUrls(data);
@@ -41,7 +44,7 @@ export default function Shorten() {
         </p>
       );
     } else {
-      content = <DataTable columns={columns} data={urls} />;
+      content = <DataTable<DataItem, unknown> columns={columns} data={urls} />;
     }
   } catch (error) {
     console.log(error);
