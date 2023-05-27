@@ -11,15 +11,12 @@ import { DataTable } from '@/components/DataTable';
 import { columns } from '@/(site)/columns';
 import { toast } from 'react-hot-toast';
 
-
 export default function Shorten() {
   const [urls, setUrls] = useState<DataItem[]>([]);
 
   const { data, error } = useContext(UrlsContext);
   const { data: session } = useSession();
   const router = useRouter();
-
-  if (error) return <div>{toast.error(error.message)}</div>;
 
   useEffect(() => {
     if (data) setUrls(data);
