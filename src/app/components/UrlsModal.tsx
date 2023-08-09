@@ -44,15 +44,6 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
   const [loading, setLoading] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
-  // function isValidURL(url: string): boolean {
-  //   try {
-  //     new URL(url);
-  //     return true;
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }
-
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
@@ -61,7 +52,6 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
     async (data: z.infer<typeof FormSchema>) => {
       try {
         setLoading(true);
-        // e.preventDefault();
         const url = data.url;
         const customCode = data.slug || "";
 

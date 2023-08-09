@@ -9,7 +9,6 @@
 "use client";
 import { useContext, useState, useEffect } from "react";
 import UrlsModal from "@/components/UrlsModal";
-import { InputForm } from "@/components/UrlsDialog";
 import UrlsContext from "@/context/UrlsContext";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -22,7 +21,7 @@ import NavigationMenuBar from "./components/NavBar";
 export default function Shorten() {
   const [urls, setUrls] = useState<DataItem[]>([]);
 
-  const { data, error } = useContext(UrlsContext);
+  const { data } = useContext(UrlsContext);
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -69,7 +68,6 @@ export default function Shorten() {
           {content}
           <div className="flex justify-center">
             <UrlsModal onUrlCreated={handleUrlCreated} />
-            {/* <InputForm /> */}
           </div>
         </main>
       </div>
