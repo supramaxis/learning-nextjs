@@ -77,7 +77,6 @@ export function DataTable<Tdata, TValue>({
           onChange={handleInputChange}
           className="max-w-sm pointer-events-auto"
         />
-        <ModeToggle />
       </div>
       <div className="rounded-md border">
         <Table>
@@ -147,6 +146,7 @@ export function DataTable<Tdata, TValue>({
         >
           Siguiente
         </Button>
+        <ModeToggle />
       </div>
     </>
   );

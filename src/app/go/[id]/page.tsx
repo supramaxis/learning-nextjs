@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { redirect } from 'next/navigation';
+import { PrismaClient } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 interface Params {
   id: string;
@@ -12,15 +12,14 @@ export default async function ShortIdPage({ params }: { params: Params }) {
   //make the redirection to the long url
 
   const data = await prisma.url.findUnique({
-    where: { shortUrl: id }
+    where: { shortUrl: id },
   });
 
   prisma.$disconnect();
 
   if (!data) {
-    redirect('/');
+    redirect("/");
   } else {
     redirect(data.url);
   }
 }
-
