@@ -1,9 +1,6 @@
-"use client";
-
 import * as React from "react";
 import { LuMoon, LuSun } from "react-icons/lu";
 import { useTheme } from "next-themes";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+/**
+ * A component that renders a dropdown menu with options to toggle between light, dark, and system themes.
+ */
 export function ModeToggle() {
   const { setTheme } = useTheme();
 

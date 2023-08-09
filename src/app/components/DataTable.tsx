@@ -1,3 +1,15 @@
+/**
+ * A table component that uses @tanstack/react-table for sorting, filtering and pagination.
+ *
+ * @template TData The type of data in the table.
+ * @template TValue The type of value in the table.
+ *
+ * @param {object} props The component props.
+ * @param {ColumnDef<TData, TValue>[]} props.columns The column definitions for the table.
+ * @param {TData[]} props.data The data to display in the table.
+ *
+ * @returns {JSX.Element} The rendered DataTable component.
+ */
 // DataTable.tsx
 
 "use client";
@@ -26,6 +38,8 @@ import { Input } from "./ui/input";
 import { useEffect, useMemo, useState } from "react";
 import { ModeToggle } from "@/components/ui/ToggleDarkMode";
 
+/* The `DataTableProps` interface is defining the props that can be passed to the `DataTable`
+component. It has two generic types `TData` and `TValue`. */
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -48,6 +62,7 @@ export function DataTable<Tdata, TValue>({
     return () => clearInterval(interval);
   }, []);
 
+  /* The `useReactTable` hook is being used to create a table instance with the specified configuration. */
   const table = useReactTable({
     columns,
     data: memoizedData,
@@ -99,6 +114,10 @@ export function DataTable<Tdata, TValue>({
             ))}
           </TableHeader>
           <TableBody>
+            {/* The `{table.getRowModel().rows?.length ? (` is a conditional statement that checks if
+            the `rows` property of the `getRowModel()` function of the `table` object is not null or
+            undefined. If it is not null or undefined, it means that there are rows in the table,
+            and the code inside the conditional statement will be executed. */}
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
