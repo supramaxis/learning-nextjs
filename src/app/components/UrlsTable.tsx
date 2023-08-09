@@ -1,12 +1,12 @@
 // components/UrlsTable.tsx
-'use client';
-import { useContext, useEffect, useMemo, useState } from 'react';
-import { mutate } from 'swr';
-import { DataItem, UrlsTableProps } from '@/types';
-import { Button, PageButton } from '@/components/TableButton/Button';
-import { Column } from 'react-table';
-import Link from 'next/link';
-import UrlsContext from '@/context/UrlsContext';
+"use client";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { mutate } from "swr";
+import { DataItem, UrlsTableProps } from "@/types";
+import { Button, PageButton } from "@/components/TableButton/Button";
+import { Column } from "react-table";
+import Link from "next/link";
+import UrlsContext from "@/context/UrlsContext";
 import {
   useTable,
   usePagination,
@@ -14,14 +14,14 @@ import {
   TableInstance,
   Cell,
   Row,
-  useBlockLayout
-} from 'react-table';
+  useBlockLayout,
+} from "react-table";
 import {
   ChevronDoubleLeftIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  ChevronDoubleRightIcon
-} from '@heroicons/react/24/solid';
+  ChevronDoubleRightIcon,
+} from "@heroicons/react/24/solid";
 
 type CustomTableInstance = TableInstance<DataItem> & {
   nextPage: () => void;
@@ -90,33 +90,33 @@ const UrlsTable: React.FC<UrlsTableProps> = ({ data }) => {
   const columns = useMemo<Column<DataItem>[]>(
     () => [
       {
-        Header: 'Link ID',
-        accessor: 'id',
-        width: 100
+        Header: "Link ID",
+        accessor: "id",
+        width: 100,
       },
       {
-        Header: 'ShortUrl',
-        accessor: 'shortUrl',
+        Header: "ShortUrl",
+        accessor: "shortUrl",
         width: 200,
         //clickable link
         Cell: ({ value }: { value: string }) => (
-          <Link target='_blank' href={`/go/${value}`}>
+          <Link target="_blank" href={`/go/${value}`}>
             {value}
           </Link>
-        )
+        ),
       },
       {
-        Header: 'Created At',
-        accessor: 'createdAt',
+        Header: "Created At",
+        accessor: "createdAt",
         Cell: ({ value }: { value: string }) => (
           <div>{value ? `${getTimeAgoLabel(value, currentTime)} ` : null}</div>
-        )
+        ),
       },
       {
-        Header: 'Actions',
-        id: 'actions',
-        accessor: (row: DataItem) => row.id
-      }
+        Header: "Actions",
+        id: "actions",
+        accessor: (row: DataItem) => row.id,
+      },
     ],
     []
   );
@@ -137,7 +137,7 @@ const UrlsTable: React.FC<UrlsTableProps> = ({ data }) => {
     previousPage,
     setPageSize,
 
-    state: { pageIndex, pageSize, pageCount }
+    state: { pageIndex, pageSize, pageCount },
   } = useTable(
     { columns, data: tableData },
     useResizeColumns,
@@ -147,25 +147,28 @@ const UrlsTable: React.FC<UrlsTableProps> = ({ data }) => {
 
   return (
     <>
-      <div className='mt-2 flex flex-col'>
-        <div className='my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8'>
+      <div className="mt-2 flex flex-col">
+        <div className="my-2 overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
           <div
-            className='py-2 align-middle inline-block min-w-full
+            className="py-2 align-middle inline-block min-w-full
             sm:px-6 lg:px-8
-          '>
-            <div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg'>
+          "
+          >
+            <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
               <table
                 {...getTableProps()}
-                className='min-w-full divide-y divide-gray-200'>
-                <thead className='bg-gray-50'>
-                  {headerGroups.map(headerGroup => (
+                className="min-w-full divide-y divide-gray-200"
+              >
+                <thead className="bg-gray-50">
+                  {headerGroups.map((headerGroup) => (
                     <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map(column => (
+                      {headerGroup.headers.map((column) => (
                         <th
                           {...column.getHeaderProps()}
-                          scope='col'
-                          className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'>
-                          {column.render('Header')}
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          {column.render("Header")}
                         </th>
                       ))}
                     </tr>
@@ -173,7 +176,8 @@ const UrlsTable: React.FC<UrlsTableProps> = ({ data }) => {
                 </thead>
                 <tbody
                   {...getTableBodyProps()}
-                  className='bg-white divide-y divide-gray-200'>
+                  className="bg-white divide-y divide-gray-200"
+                >
                   {page.map((row: Row<DataItem>) => {
                     prepareRow(row);
                     return (
@@ -182,9 +186,10 @@ const UrlsTable: React.FC<UrlsTableProps> = ({ data }) => {
                           return (
                             <td
                               {...cell.getCellProps()}
-                              role='cell'
-                              className='px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900'>
-                              {cell.render('Cell')}
+                              role="cell"
+                              className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                            >
+                              {cell.render("Cell")}
                             </td>
                           );
                         })}
@@ -198,8 +203,8 @@ const UrlsTable: React.FC<UrlsTableProps> = ({ data }) => {
         </div>
       </div>
 
-      <div className='py-3 flex items-center justify-between'>
-        <div className='flex-1 flex justify-between sm:hidden'>
+      <div className="py-3 flex items-center justify-between">
+        <div className="flex-1 flex justify-between sm:hidden">
           <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
             Previous
           </Button>
@@ -207,21 +212,22 @@ const UrlsTable: React.FC<UrlsTableProps> = ({ data }) => {
             Next
           </Button>
         </div>
-        <div className='hidden sm:flex-1 sm:flex sm:items-center sm:justify-between'>
-          <div className='flex gap-x-2 items-baseline'>
-            <span className='text-sm text-zinc-200'>
-              Pagina <span className='font-medium'>{pageIndex + 1}</span> de{' '}
-              <span className='font-medium'>{pageOptions.length}</span>
+        <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+          <div className="flex gap-x-2 items-baseline">
+            <span className="text-sm text-zinc-200">
+              Pagina <span className="font-medium">{pageIndex + 1}</span> de{" "}
+              <span className="font-medium">{pageOptions.length}</span>
             </span>
             <label>
-              <span className='sr-only'>Items por Pagina</span>
+              <span className="sr-only">Items por Pagina</span>
               <select
-                className='mt-1 w-full rounded-md border-gray-700 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+                className="mt-1 w-full rounded-md border-gray-700 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 value={pageSize}
-                onChange={e => {
+                onChange={(e) => {
                   setPageSize(Number(e.target.value));
-                }}>
-                {[5, 10, 20].map(pageSize => (
+                }}
+              >
+                {[5, 10, 20].map((pageSize) => (
                   <option key={pageSize} value={pageSize}>
                     Show {pageSize}
                   </option>
@@ -230,39 +236,43 @@ const UrlsTable: React.FC<UrlsTableProps> = ({ data }) => {
             </label>
           </div>
           <nav
-            className='relative z-0 inline-flex rounded-md shadow-sm -space-x-px'
-            aria-label='Pagination'>
+            className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+            aria-label="Pagination"
+          >
             <PageButton
-              className='rounded-l-md'
+              className="rounded-l-md"
               onClick={() => gotoPage(0)}
-              disabled={!canPreviousPage}>
-              <span className='sr-only'>First</span>
-              <ChevronDoubleLeftIcon className='h-5 w-5' aria-hidden='true' />
+              disabled={!canPreviousPage}
+            >
+              <span className="sr-only">First</span>
+              <ChevronDoubleLeftIcon className="h-5 w-5" aria-hidden="true" />
             </PageButton>
             <PageButton
               onClick={() => previousPage()}
-              disabled={!canPreviousPage}>
-              <span className='sr-only'>Previous</span>
+              disabled={!canPreviousPage}
+            >
+              <span className="sr-only">Previous</span>
               <ChevronLeftIcon
-                className='h-5 w-5 text-gray-400'
-                aria-hidden='true'
+                className="h-5 w-5 text-gray-400"
+                aria-hidden="true"
               />
             </PageButton>
             <PageButton onClick={() => nextPage()} disabled={!canNextPage}>
-              <span className='sr-only'>Next</span>
+              <span className="sr-only">Next</span>
               <ChevronRightIcon
-                className='h-5 w-5 text-gray-400'
-                aria-hidden='true'
+                className="h-5 w-5 text-gray-400"
+                aria-hidden="true"
               />
             </PageButton>
             <PageButton
-              className='rounded-r-md'
+              className="rounded-r-md"
               onClick={() => gotoPage(pageCount - 1)}
-              disabled={!canNextPage}>
-              <span className='sr-only'>Last</span>
+              disabled={!canNextPage}
+            >
+              <span className="sr-only">Last</span>
               <ChevronDoubleRightIcon
-                className='h-5 w-5 text-gray-400'
-                aria-hidden='true'
+                className="h-5 w-5 text-gray-400"
+                aria-hidden="true"
               />
             </PageButton>
           </nav>
@@ -273,4 +283,3 @@ const UrlsTable: React.FC<UrlsTableProps> = ({ data }) => {
 };
 
 export default UrlsTable;
-

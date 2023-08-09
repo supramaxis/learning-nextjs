@@ -1,21 +1,22 @@
 //@tanstack/react-table columns definitions
-'use client';
+"use client";
 
-import { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, ArrowUpDown, ExternalLink } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { ColumnDef } from "@tanstack/react-table";
+import { LuMoreHorizontal, LuArrowDown, LuExternalLink } from "react-icons/lu";
+// import { MoreHorizontal, ArrowUpDown, ExternalLink } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { DataItem } from '@/types';
-import Link from 'next/link';
-import axios from 'axios';
-import { toast } from 'react-hot-toast';
-import { mutate } from 'swr';
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { DataItem } from "@/types";
+import Link from "next/link";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { mutate } from "swr";
 
 const getTimeAgoLabel = (dateString: string, currentTime: Date) => {
   const now = new Date();
@@ -41,54 +42,54 @@ const getTimeAgoLabel = (dateString: string, currentTime: Date) => {
 
 export const columns: ColumnDef<DataItem>[] = [
   {
-    accessorKey: 'id',
+    accessorKey: "id",
     header: ({ column }) => {
       return (
         <Button
-          variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Link ID
-          <ArrowUpDown className='h-4 w-4 ml-2' />
+          <LuArrowDown className="h-4 w-4 ml-2" />
         </Button>
       );
-    }
+    },
   },
   {
-    accessorKey: 'shortUrl',
-    header: 'Short URL',
+    accessorKey: "shortUrl",
+    header: "Short URL",
     cell: ({ row }) => {
       const { shortUrl } = row.original;
       return (
-        <Link target='_blank' href={`/go/${shortUrl}`}>
-          {shortUrl} <ExternalLink className='h-4 w-4 inline-block' />
+        <Link target="_blank" href={`/go/${shortUrl}`}>
+          {shortUrl} <LuExternalLink className="h-4 w-4 inline-block" />
         </Link>
       );
-    }
+    },
   },
   {
-    accessorKey: 'createdAt',
-    header: 'Created At',
+    accessorKey: "createdAt",
+    header: "Created At",
     cell: ({ row }) => {
       const { createdAt } = row.original;
       return (
-        <span className='text-sm'>
+        <span className="text-sm">
           {getTimeAgoLabel(createdAt, new Date())}
         </span>
       );
-      
-    }
+    },
   },
   {
-    id: 'actions',
-    header: 'Actions',
+    id: "actions",
+    header: "Actions",
     cell: ({ row }) => {
       const { id } = row.original;
       const handleDelete = async () => {
         try {
           const res = await axios.delete(`/api/delete/${id}`);
           console.log(res.data);
-          toast.success('La Url ha sido eliminada');
-          mutate('/api/urls');
+          toast.success("La Url ha sido eliminada");
+          mutate("/api/urls");
         } catch (error: any) {
           console.log(error.message);
           if (error.response) {
@@ -100,19 +101,20 @@ export const columns: ColumnDef<DataItem>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='ghost' className='h-8 w-8 p-0'>
-              <span className='sr-only'>Open Menu</span>
-              <MoreHorizontal className='h-4 w-4' />
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open Menu</span>
+              <LuMoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
+          <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
-            <DropdownMenuItem className='cursor-pointer' onClick={handleDelete}>Delete</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" onClick={handleDelete}>
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
-    }
-  }
+    },
+  },
 ];
-

@@ -1,6 +1,6 @@
 // DataTable.tsx
 
-'use client';
+"use client";
 
 import {
   ColumnDef,
@@ -10,8 +10,8 @@ import {
   getPaginationRowModel,
   ColumnFiltersState,
   getFilteredRowModel,
-  getSortedRowModel
-} from '@tanstack/react-table';
+  getSortedRowModel,
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -19,21 +19,21 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
-} from '@/components/ui/table';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { useEffect, useMemo, useState } from 'react';
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { useEffect, useMemo, useState } from "react";
+import { ModeToggle } from "@/components/ui/ToggleDarkMode";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
-
 
 export function DataTable<Tdata, TValue>({
   columns,
-  data
+  data,
 }: DataTableProps<Tdata, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -48,7 +48,6 @@ export function DataTable<Tdata, TValue>({
     return () => clearInterval(interval);
   }, []);
 
-
   const table = useReactTable({
     columns,
     data: memoizedData,
@@ -58,33 +57,34 @@ export function DataTable<Tdata, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     state: {
-      columnFilters
+      columnFilters,
     },
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    table.getColumn('shortUrl')?.setFilterValue(e.target.value);
-  }
+    table.getColumn("shortUrl")?.setFilterValue(e.target.value);
+  };
 
-  const filterInputValue = (table.getColumn("shortUrl")?.getFilterValue() as string) ?? ""
-
+  const filterInputValue =
+    (table.getColumn("shortUrl")?.getFilterValue() as string) ?? "";
 
   return (
     <>
-      <div className='flex items-center py-4 pointer-events-none'>
+      <div className="flex items-center py-4 pointer-events-none">
         <Input
-          placeholder='Filter URLS'
+          placeholder="Filter URLS"
           value={filterInputValue}
           onChange={handleInputChange}
-          className='max-w-sm pointer-events-auto'
+          className="max-w-sm pointer-events-auto"
         />
+        <ModeToggle />
       </div>
-      <div className='rounded-md border'>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
+                {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
@@ -101,11 +101,12 @@ export function DataTable<Tdata, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map(row => (
+              table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map(cell => (
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -119,7 +120,8 @@ export function DataTable<Tdata, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className='h-24 text-center'>
+                  className="h-24 text-center"
+                >
                   Sin resultados
                 </TableCell>
               </TableRow>
@@ -128,23 +130,24 @@ export function DataTable<Tdata, TValue>({
         </Table>
       </div>
 
-      <div className='flex items-center justify-end space-x-2 py-4'>
+      <div className="flex items-center justify-end space-x-2 py-4">
         <Button
-          variant='outline'
-          size='sm'
+          variant="outline"
+          size="sm"
           onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}>
+          disabled={!table.getCanPreviousPage()}
+        >
           Anterior
         </Button>
         <Button
-          variant='outline'
-          size='sm'
+          variant="outline"
+          size="sm"
           onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}>
+          disabled={!table.getCanNextPage()}
+        >
           Siguiente
         </Button>
       </div>
     </>
   );
 }
-

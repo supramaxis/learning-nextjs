@@ -24,7 +24,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
       setLoading(true);
       e.preventDefault();
       const url = inputRef.current?.value || "";
-      const customCode = customCodeRef.current?.value || '';
+      const customCode = customCodeRef.current?.value || "";
 
       if (!isValidURL(url)) {
         inputRef.current?.setCustomValidity("URL invalida");
@@ -58,8 +58,6 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
     setIsOpen(true);
   }
 
-
-
   return (
     <>
       <div className=" inset-0 flex items-center justify-center">
@@ -69,7 +67,6 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
         >
           Crear Enlaces
         </button>
-
       </div>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -116,7 +113,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
                         placeholder="URL"
                         className="input input-bordered w-full max-w-xs bg-slate-200"
                         required
-                        pattern='^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'
+                        pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$"
                       />
                     </div>
                     <div className="form-control w-full max-w-xs">
