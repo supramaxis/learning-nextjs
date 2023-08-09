@@ -9,6 +9,7 @@
 "use client";
 import { useContext, useState, useEffect } from "react";
 import UrlsModal from "@/components/UrlsModal";
+import { InputForm } from "@/components/UrlsDialog";
 import UrlsContext from "@/context/UrlsContext";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -58,16 +59,17 @@ export default function Shorten() {
   return (
     <>
       <NavigationMenuBar />
-      <div className="min-h-screen  text-zinc-200">
+      <div className="text-zinc-200">
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
           <div className="">
             <h1 className="text-3xl font-bold text-zinc-200">
               Shorten your links
             </h1>
           </div>
-          <div className="mt-4">
-            {content}
+          {content}
+          <div className="flex justify-center">
             <UrlsModal onUrlCreated={handleUrlCreated} />
+            {/* <InputForm /> */}
           </div>
         </main>
       </div>
