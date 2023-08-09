@@ -24,7 +24,15 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
-
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -51,8 +59,15 @@ export function DataTable<Tdata, TValue>({
 }: DataTableProps<Tdata, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [pageSize, setPageSize] = useState(6);
 
   const memoizedData = useMemo(() => data, [data]);
+
+  const handlePageSizeChange = (value: string) => {
+    const pageSizeNumber = Number(value);
+    setPageSize(pageSizeNumber);
+    table.setPageSize(pageSizeNumber);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -73,6 +88,11 @@ export function DataTable<Tdata, TValue>({
     getSortedRowModel: getSortedRowModel(),
     state: {
       columnFilters,
+    },
+    initialState: {
+      pagination: {
+        pageSize: 6,
+      },
     },
   });
 
@@ -149,6 +169,24 @@ export function DataTable<Tdata, TValue>({
       </div>
 
       <div className="flex items-center justify-end space-x-2 py-4">
+        <Select
+          value={String(table.getState().pagination.pageSize)}
+          onValueChange={handlePageSizeChange}
+        >
+          <SelectTrigger className="w-[100px]">
+            <SelectValue placeholder="Filter" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Items</SelectLabel>
+              {[6, 15, 20, 25].map((size) => (
+                <SelectItem key={size} value={String(size)}>
+                  {size} Links
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
         <Button
           variant="outline"
           size="sm"
