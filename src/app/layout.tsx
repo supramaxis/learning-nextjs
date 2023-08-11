@@ -3,6 +3,7 @@ import "./globals.css";
 import AuthContext from "./context/AuthContext";
 import { UrlsContextProvider } from "./context/UrlsProvider";
 import { ThemeProvider } from "@/context/ThemeProvider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata = {
   title: "Create Next App",
@@ -18,12 +19,14 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <AuthContext>
-            <UrlsContextProvider>
-              <ToasterContext />
-              {children}
-            </UrlsContextProvider>
-          </AuthContext>
+          <ClerkProvider>
+            <AuthContext>
+              <UrlsContextProvider>
+                <ToasterContext />
+                {children}
+              </UrlsContextProvider>
+            </AuthContext>
+          </ClerkProvider>
         </ThemeProvider>
       </body>
     </html>
