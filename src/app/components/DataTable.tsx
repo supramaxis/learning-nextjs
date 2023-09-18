@@ -45,6 +45,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useEffect, useMemo, useState } from "react";
 import { ModeToggle } from "@/components/ui/ToggleDarkMode";
+import ErrorBoundary from "./ErrorBoundary";
 
 /* The `DataTableProps` interface is defining the props that can be passed to the `DataTable`
 component. It has two generic types `TData` and `TValue`. */
@@ -100,8 +101,36 @@ export function DataTable<Tdata, TValue>({
     table.getColumn("shortUrl")?.setFilterValue(e.target.value);
   };
 
-  const filterInputValue =
-    (table.getColumn("shortUrl")?.getFilterValue() as string) ?? "";
+  const filterInputValue = (table.getColumn("shortUrl")?.getFilterValue() as string) ?? "";
+  function renderHeaderGroups() {
+    try {
+      return table.getHeaderGroups().map(
+        (headerGroup) =>
+          headerGroup && headerGroup.headers && (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  header &&
+                  header.column &&
+                  header.column.columnDef && (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  )
+                );
+              })}
+            </TableRow>
+          )
+      );
+    } catch (error) {
+      console.error("An error occurred while rendering the table: ", error);
+    }
+  }
 
   return (
     <>
@@ -114,58 +143,43 @@ export function DataTable<Tdata, TValue>({
         />
       </div>
       <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {/* The `{table.getRowModel().rows?.length ? (` is a conditional statement that checks if
+        <ErrorBoundary>
+          <Table>
+            <TableHeader>{renderHeaderGroups()}</TableHeader>
+            <TableBody>
+              {/* The `{table.getRowModel().rows?.length ? (` is a conditional statement that checks if
             the `rows` property of the `getRowModel()` function of the `table` object is not null or
             undefined. If it is not null or undefined, it means that there are rows in the table,
             and the code inside the conditional statement will be executed. */}
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    Sin resultados
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  Sin resultados
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              )}
+            </TableBody>
+          </Table>
+        </ErrorBoundary>
       </div>
 
       <div className="flex items-center justify-end space-x-2 py-4">
