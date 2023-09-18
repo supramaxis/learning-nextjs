@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useAuth, clerkClient } from "@clerk/nextjs";
 
 import { UrlsModalProps } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -50,6 +51,8 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
 
   const onSubmitForm = form.handleSubmit(
     async (data: z.infer<typeof FormSchema>) => {
+      
+
       try {
         setLoading(true);
         const url = data.url;
@@ -65,6 +68,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
           body: JSON.stringify({ url, customCode }),
         });
         const resultData = await res.json();
+        console.log("resultData", resultData);
 
         if (resultData.error) {
           toast.error("Error creating short url" + resultData.error.message);

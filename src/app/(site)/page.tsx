@@ -16,14 +16,16 @@ import { DataItem } from "@/types";
 import { DataTable } from "@/components/DataTable";
 import { columns } from "@/(site)/columns";
 import NavigationMenuBar from "./components/NavBar";
+import { useAuth, clerkClient } from "@clerk/nextjs";
 ("@/(site)/components/NavBar");
 
 export default function Shorten() {
   const [urls, setUrls] = useState<DataItem[]>([]);
-
+  // const { sessionId } = useAuth();
   const { data } = useContext(UrlsContext);
   const { data: session } = useSession();
   const router = useRouter();
+  
 
   useEffect(() => {
     if (data) setUrls(data);
@@ -33,9 +35,6 @@ export default function Shorten() {
     setUrls([...urls, url]);
   };
 
-  useEffect(() => {
-    if (!session?.user.email) router.push("/login");
-  }, [session]);
 
   /* The code block is determining the content to be rendered based on the value of the `data` variable. */
   let content;
