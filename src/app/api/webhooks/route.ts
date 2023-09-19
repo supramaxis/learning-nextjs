@@ -27,38 +27,67 @@ async function handler(req: Request) {
     );
   }
   const eventType: EventType = evt.type;
-  if (eventType === "user.created" || eventType === "user.updated") {
-    console.log("User created event");
-    const { id, ...attributes } = evt.data;
-    console.log(id);
-    console.log(attributes);
+  try {
+    if (eventType === "user.created" || eventType === "user.updated") {
+      console.log("User created event");
+      const { id, ...attributes } = evt.data;
+      console.log("id received");
+      console.log("attributes received");
+      interface EmailAddress {
+        email_address: string;
+        reserved: boolean;
+      }
+      const emailAddresses: EmailAddress[] = Array.isArray(
+        attributes.email_addresses
+      )
+        ? attributes.email_addresses
+        : [];
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    if (id) {
-      await prisma.clerkUser.upsert({
-        where: { externalId: id as string },
-        create: {
-          externalId: id as string,
-          attributes,
-        },
-        update: {
-          attributes,
-        },
-      });
-      return NextResponse.json(
-        { message: "User created event" },
-        { status: 200 }
+      const emailAddressObj: EmailAddress | undefined = emailAddresses.find(
+        (email) => !email.reserved
       );
+
+      const emailAddress: string | null = emailAddressObj
+        ? emailAddressObj.email_address
+        : null;
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      if (id) {
+        await prisma.clerkUser.upsert({
+          where: { externalId: id as string },
+          create: {
+            externalId: id as string,
+            attributes,
+            username: attributes.username as string,
+            email: emailAddress as string,
+          },
+          update: {
+            attributes,
+          },
+        });
+        return NextResponse.json(
+          { message: "User created event" },
+          { status: 200 }
+        );
+      } else {
+        console.log("Error: No id in event data to update user");
+        return NextResponse.json(
+          { error: "prisma did not got the id to upsert user" },
+          { status: 500 }
+        );
+      }
     } else {
-      console.log("Error: No id in event data to update user");
+      console.log("Unknown event type");
       return NextResponse.json(
-        { error: "prisma did not got the id to upsert user" },
-        { status: 500 }
+        { error: "Unknown event type" },
+        { status: 400 }
       );
     }
-  } else {
-    console.log("Unknown event type");
-    return NextResponse.json({ error: "Unknown event type" }, { status: 400 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
 
