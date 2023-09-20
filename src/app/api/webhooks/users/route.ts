@@ -62,8 +62,7 @@ async function handler(req: Request) {
           },
           update: {
             attributes,
-          }
-
+          },
         });
         return NextResponse.json(
           { message: "User created event" },
