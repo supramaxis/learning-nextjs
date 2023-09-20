@@ -1,6 +1,5 @@
 'use client';
 
-import AuthForm from '@/(site)/components/AuthForm';
 
 // authform for login and register
 
@@ -22,7 +21,6 @@ const Login = () => {
           Inicia Sesion!
         </h2>
       </div>
-      <AuthForm />
     </div>
   );
 };
