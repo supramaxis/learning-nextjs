@@ -1,20 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prismadb';
-import getCurrentUser from '@/actions/getCurrentUser';
-
+import { currentUser, useAuth, clerkClient } from '@clerk/nextjs';
 export async function DELETE(
   request: Request,
   { params }: { params: { id: number } }
 ) {
 
   try {
-    const currentUser = await getCurrentUser();
+    const actualUser = await currentUser()
 
-    if (!currentUser?.id || !currentUser?.email) {
+    if (!actualUser?.id || !actualUser?.externalId) {
       return new NextResponse('No autorizado', { status: 401 });
     }
     const urlId = Number(params.id);
-    const userId = String(currentUser.id);
+    const userId = String(actualUser.id);
 
     await prisma.url.delete({
       where: {

@@ -1,6 +1,5 @@
 import ToasterContext from "./context/ToasterContext";
 import "./globals.css";
-import AuthContext from "./context/AuthContext";
 import { UrlsContextProvider } from "./context/UrlsProvider";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -20,12 +19,10 @@ export default function RootLayout({
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ClerkProvider>
-            <AuthContext>
               <UrlsContextProvider>
                 <ToasterContext />
                 {children}
               </UrlsContextProvider>
-            </AuthContext>
           </ClerkProvider>
         </ThemeProvider>
       </body>

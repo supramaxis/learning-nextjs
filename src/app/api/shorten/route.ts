@@ -2,18 +2,20 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
-import getSession from "@/actions/getSession";
-import { getAuth, clerkClient } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs";
 
 export async function POST(req: NextRequest) {
   // const session = await getSession();
   const body = await req.json();
   const { url, customCode } = body;
-  const { userId, sessionId } = getAuth(req);
-  const session = sessionId ? await clerkClient.sessions.getSession(sessionId) : null;
-
-
+  const { userId, sessionId } = auth();
+  const session = sessionId
+    ? await clerkClient.sessions.getSession(sessionId)
+    : null;
+  console.log(`Session: ${JSON.stringify(session)}`);
   let shortUrl = customCode;
+  
 
   if (!userId) {
     return (
@@ -30,18 +32,40 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    if (session) {
-      const userId = session.userId;
+    const user = await prisma.clerkUser.findUnique({
+      where: {
+        externalId: userId,
+      }
+    })
+    if (!user) {
+      return NextResponse.json(
+        { error: "No user found" },
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
-      const data = await prisma.url.create({
-        data: {
-          url,
-          shortUrl,
-          userId,
-        },
-      });
-      console.log(data);
-      return NextResponse.json(data);
+    if (session) {
+      const userId = session.userId
+      if (userId) {
+        const data = await prisma.url.create({
+          data: {
+            url,
+            shortUrl,
+            user: {
+              connect: {
+                id: user.id
+              }
+            }
+          },
+        });
+        console.log(data);
+        return NextResponse.json(data);
+      } else {
+        return NextResponse.json(
+          { error: "userId null or undefined" },
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
     } else {
       return NextResponse.json(
         { error: "No session found" },
