@@ -51,8 +51,6 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
 
   const onSubmitForm = form.handleSubmit(
     async (data: z.infer<typeof FormSchema>) => {
-      
-
       try {
         setLoading(true);
         const url = data.url;
@@ -71,7 +69,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
         console.log("resultData", resultData);
 
         if (resultData.error) {
-          toast.error("Error creating short url" + resultData.error.message);
+          toast.error("Error creating short url:" + resultData.error.message);
           console.log(resultData.error);
           return;
         }
@@ -79,8 +77,11 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
         setLoading(false);
         onUrlCreated(resultData);
         setShowDialog(false);
-      } catch (error) {
+        form.reset();
+      } catch (error: any) {
         console.log(error);
+        setLoading(false);
+        toast.error("Error creating short url" + error.message);
       }
     }
   );
