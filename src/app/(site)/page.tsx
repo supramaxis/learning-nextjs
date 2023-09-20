@@ -10,7 +10,6 @@
 import { useContext, useState, useEffect } from "react";
 import UrlsModal from "@/components/UrlsModal";
 import UrlsContext from "@/context/UrlsContext";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { DataItem } from "@/types";
 import { DataTable } from "@/components/DataTable";
@@ -23,7 +22,6 @@ export default function Shorten() {
   const [urls, setUrls] = useState<DataItem[]>([]);
   // const { sessionId } = useAuth();
   const { data } = useContext(UrlsContext);
-  const { data: session } = useSession();
   const router = useRouter();
   
 
