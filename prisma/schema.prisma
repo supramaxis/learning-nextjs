@@ -16,23 +16,22 @@ model Url {
   shortUrl   String?   @unique
   customCode String?   @unique
   createdAt  DateTime  @default(now())
+  user       ClerkUser @relation(fields: [userId], references: [externalId], onDelete: Cascade)
   userId     String
-  user       ClerkUser @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, id])
-  
 }
 
 //user model for the database
 
 model ClerkUser {
-  id    String @id @default(cuid())
-  externalId String @unique
+  id         String   @id @default(cuid())
+  externalId String   @unique
   attributes Json
-  username  String 
-  email String 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  username   String
+  email      String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   links Url[]
 }
