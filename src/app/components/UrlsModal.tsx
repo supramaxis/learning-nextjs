@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { useAuth, clerkClient } from "@clerk/nextjs";
-
 import { UrlsModalProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import {

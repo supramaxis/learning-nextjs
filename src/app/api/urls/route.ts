@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
-// import getCurrentUser from '@/actions/getCurrentUser';
-import { currentUser, useAuth, clerkClient } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs";
 
 export async function GET() {
   try {
-    // const currentUser = await getCurrentUser();
     const actualUser = await currentUser();
     if (!actualUser?.id || !actualUser?.primaryEmailAddressId) {
       console.log("No autorizado");
@@ -17,7 +15,6 @@ export async function GET() {
           userId,
         },
       });
-      // console.log(urls);
       return NextResponse.json(urls);
     }
   } catch (error) {
