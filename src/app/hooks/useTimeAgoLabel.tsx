@@ -1,10 +1,10 @@
 // useTimeAgoLabel.ts - Custom hook for displaying a time ago label
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const getTimeAgoLabel = (dateString: string, currentTime: Date) => {
   if (!dateString || !currentTime) {
-    return '';
+    return "";
   }
   const now = new Date();
   const date = new Date(dateString);
@@ -25,11 +25,11 @@ const getTimeAgoLabel = (dateString: string, currentTime: Date) => {
     const months = Math.floor(diffInSeconds / 2592000);
     return `${months} months ago`;
   }
-  return '';
+  return "";
 };
 
 export const useTimeAgoLabel = (dateString: string, currentTime: Date) => {
-  const [timeAgoLabel, setTimeAgoLabel] = useState('');
+  const [timeAgoLabel, setTimeAgoLabel] = useState("");
 
   useEffect(() => {
     const updateTimeAgo = () => {
@@ -42,8 +42,7 @@ export const useTimeAgoLabel = (dateString: string, currentTime: Date) => {
 
       return () => clearInterval(interval);
     };
-  }, []);
+  }, [dateString, currentTime]);
 
   return timeAgoLabel;
 };
-

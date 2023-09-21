@@ -1,10 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
-import { currentUser, useAuth, clerkClient } from "@clerk/nextjs";
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: number } }
-) {
+import { currentUser } from "@clerk/nextjs";
+export async function DELETE({ params }: { params: { id: number } }) {
   try {
     const actualUser = await currentUser();
 

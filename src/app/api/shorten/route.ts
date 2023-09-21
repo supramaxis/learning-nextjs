@@ -6,7 +6,6 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { auth } from "@clerk/nextjs";
 
 export async function POST(req: NextRequest) {
-  // const session = await getSession();
   const body = await req.json();
   const { url, customCode } = body;
   const { userId, sessionId } = auth();
@@ -15,7 +14,6 @@ export async function POST(req: NextRequest) {
     : null;
   console.log(`Session: ${JSON.stringify(session)}`);
   let shortUrl = customCode;
-  
 
   if (!userId) {
     return (
@@ -35,8 +33,8 @@ export async function POST(req: NextRequest) {
     const user = await prisma.clerkUser.findUnique({
       where: {
         externalId: userId,
-      }
-    })
+      },
+    });
     if (!user) {
       return NextResponse.json(
         { error: "No user found" },
@@ -45,7 +43,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (session) {
-      const userId = session.userId
+      const userId = session.userId;
       if (userId) {
         const data = await prisma.url.create({
           data: {
@@ -53,9 +51,9 @@ export async function POST(req: NextRequest) {
             shortUrl,
             user: {
               connect: {
-                id: user.id
-              }
-            }
+                id: user.id,
+              },
+            },
           },
         });
         console.log(data);

@@ -19,10 +19,10 @@ export default function RootLayout({
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <ClerkProvider>
-              <UrlsContextProvider>
-                <ToasterContext />
-                {children}
-              </UrlsContextProvider>
+            <UrlsContextProvider>
+              <ToasterContext />
+              {children}
+            </UrlsContextProvider>
           </ClerkProvider>
         </ThemeProvider>
       </body>

@@ -101,12 +101,14 @@ export function DataTable<Tdata, TValue>({
     table.getColumn("shortUrl")?.setFilterValue(e.target.value);
   };
 
-  const filterInputValue = (table.getColumn("shortUrl")?.getFilterValue() as string) ?? "";
+  const filterInputValue =
+    (table.getColumn("shortUrl")?.getFilterValue() as string) ?? "";
   function renderHeaderGroups() {
     try {
       return table.getHeaderGroups().map(
         (headerGroup) =>
-          headerGroup && headerGroup.headers && (
+          headerGroup &&
+          headerGroup.headers && (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (

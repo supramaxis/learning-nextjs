@@ -1,14 +1,14 @@
-import clsx from 'clsx';
-import { ButtonProps } from '@/types';
+import clsx from "clsx";
+import { ButtonProps } from "@/types";
 
 const LoginButton: React.FC<ButtonProps> = ({
-  type = 'button',
+  type = "button",
   fullWidth,
   children,
   onClick,
   secondary,
   danger,
-  disabled
+  disabled,
 }) => {
   return (
     <button
@@ -29,19 +29,19 @@ const LoginButton: React.FC<ButtonProps> = ({
     focus-visible:outline-offset-2
     
     `,
-        disabled && 'opacity-50 cursor-default',
-        fullWidth && 'w-full',
-        secondary ? 'text-gray-900' : 'text-white',
+        disabled && "opacity-50 cursor-default",
+        fullWidth && "w-full",
+        secondary ? "text-gray-900" : "text-white",
         danger &&
-          'bg-rose-500 hover:bg-rose-600 focus-visible:outline-rose-600',
+          "bg-rose-500 hover:bg-rose-600 focus-visible:outline-rose-600",
         !secondary &&
           !danger &&
-          'bg-lime-500 hover:bg-lime-600 focus-visible:outline-lime-600'
-      )}>
+          "bg-lime-500 hover:bg-lime-600 focus-visible:outline-lime-600"
+      )}
+    >
       {children}
     </button>
   );
 };
 
 export default LoginButton;
-
