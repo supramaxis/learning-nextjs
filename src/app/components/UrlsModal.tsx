@@ -95,9 +95,9 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
         {showDialog && (
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Acortar Enlaces</DialogTitle>
+              <DialogTitle>Create short URL</DialogTitle>
               <DialogDescription>
-                Crea enlaces cortos para compartir rapidamente
+                Create a short URL by entering a valid URL and an optional slug.
               </DialogDescription>
             </DialogHeader>
             <div className="flex justify-center items-center ">
@@ -130,12 +130,12 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
                       render={({ field }) => (
                         <>
                           <FormItem>
-                            <FormLabel>Codigo personalizado</FormLabel>
+                            <FormLabel>Custom code</FormLabel>
                             <FormControl>
                               <Input placeholder="Short Code" {...field} />
                             </FormControl>
                             <FormDescription>
-                              Crea un codigo personalizado para este enlace
+                              Optional: enter a custom code for your short URL
                             </FormDescription>
                             <FormMessage />
                           </FormItem>

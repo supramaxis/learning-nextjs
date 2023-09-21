@@ -35,7 +35,7 @@ export default function Shorten() {
     } else if (data.length === 0) {
       content = (
         <p className="flex items-center justify-center">
-          No hay urls para mostrar
+          No urls found. Create one!
         </p>
       );
     } else {

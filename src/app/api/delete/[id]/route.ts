@@ -6,7 +6,7 @@ export async function DELETE({ params }: { params: { id: number } }) {
     const actualUser = await currentUser();
 
     if (!actualUser?.id || !actualUser?.emailAddresses?.[0]?.emailAddress) {
-      return new NextResponse("No autorizado", { status: 401 });
+      return new NextResponse("Unauthorized", { status: 401 });
     }
     const urlId = Number(params.id);
     const userId = String(actualUser.id);
@@ -23,11 +23,11 @@ export async function DELETE({ params }: { params: { id: number } }) {
     return new NextResponse(null, { status: 204 });
   } catch (error: any) {
     if (error.code === "P2025") {
-      return new NextResponse("No se encontro una url con ese id", {
+      return new NextResponse("No url was found with that id", {
         status: 404,
       });
     }
-    console.log("ERROR_MESSAGE FROM API/URLS", error);
-    return new NextResponse("ERROR_MESSAGE FROM API/URLS", { status: 500 });
+    console.log("delete endpoint error", error);
+    return new NextResponse("delete endpoint error", { status: 500 });
   }
 }

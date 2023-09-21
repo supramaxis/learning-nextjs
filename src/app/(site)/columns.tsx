@@ -87,7 +87,7 @@ export const columns: ColumnDef<DataItem>[] = [
         try {
           const res = await axios.delete(`/api/delete/${id}`);
           console.log(res.data);
-          toast.success("La Url ha sido eliminada");
+          toast.success("Url has been deleted");
           mutate("/api/urls");
         } catch (error: any) {
           console.log(error.message);

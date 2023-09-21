@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
   if (!userId) {
     return (
-      NextResponse.json({ error: "No autorizado" }),
+      NextResponse.json({ error: "Unauthorized" }),
       {
         status: 401,
         headers: { "Content-Type": "application/json" },

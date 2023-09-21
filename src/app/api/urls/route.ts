@@ -6,8 +6,8 @@ export async function GET() {
   try {
     const actualUser = await currentUser();
     if (!actualUser?.id || !actualUser?.primaryEmailAddressId) {
-      console.log("No autorizado");
-      return new NextResponse("No autorizado", { status: 401 });
+      console.log("Unauthorized");
+      return new NextResponse("Unauthorized", { status: 401 });
     } else {
       const userId = actualUser.id;
       const urls = await prisma.url.findMany({
