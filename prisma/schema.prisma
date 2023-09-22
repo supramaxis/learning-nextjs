@@ -16,10 +16,10 @@ model Url {
   shortUrl   String?   @unique
   customCode String?   @unique
   createdAt  DateTime  @default(now())
-  user       ClerkUser @relation(fields: [userId], references: [externalId], onDelete: Cascade)
-  userId     String
+  user       ClerkUser @relation(fields: [externalId], references: [externalId], onDelete: Cascade)
+  externalId String
 
-  @@unique([userId, id])
+  @@unique([externalId, id])
 }
 
 //user model for the database
