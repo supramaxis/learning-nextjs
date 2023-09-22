@@ -90,7 +90,7 @@ export const columns: ColumnDef<DataItem>[] = [
           toast.success("Url has been deleted");
           mutate("/api/urls");
         } catch (error: any) {
-          console.log(error.message);
+          console.log(error);
           if (error.response) {
             toast.error(error.response.data);
           }

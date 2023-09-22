@@ -11,7 +11,7 @@ export const UrlsContext = createContext<UrlsContextType>({
   data: undefined,
   error: undefined,
   setUrls: () => null,
-  handleUrlDeleted: () => null, // Add handleUrlDeleted with empty function
+  handleUrlDeleted: () => {}, // Add handleUrlDeleted with empty function
 });
 
 export default UrlsContext;

@@ -8,8 +8,10 @@ import { UrlsContext } from "./UrlsContext";
 import { useSession } from "@clerk/nextjs";
 
 const fetcher = async (url: string): Promise<DataItem[]> => {
+  console.log("fetching data", url);
   const res = await fetch(url);
   const data = await res.json();
+  console.log("finished fetching data", data);
   return data;
 };
 

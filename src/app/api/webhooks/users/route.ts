@@ -36,6 +36,7 @@ async function handler(req: Request) {
       interface EmailAddress {
         email_address: string;
         reserved: boolean;
+        id: string;
       }
       const emailAddresses: EmailAddress[] = Array.isArray(
         attributes.email_addresses
@@ -44,7 +45,7 @@ async function handler(req: Request) {
         : [];
 
       const emailAddressObj: EmailAddress | undefined = emailAddresses.find(
-        (email) => !email.reserved
+        (email) => email.id
       );
 
       const emailAddress: string | null = emailAddressObj
