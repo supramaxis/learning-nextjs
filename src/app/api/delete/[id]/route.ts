@@ -1,33 +1,42 @@
-import { NextResponse } from "next/server";
 import prisma from "@/lib/prismadb";
+import { NextResponse, NextRequest } from "next/server";
 import { currentUser } from "@clerk/nextjs";
-export async function DELETE({ params }: { params: { id: number } }) {
-  try {
-    const actualUser = await currentUser();
+import { clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs";
+import type { NextApiRequest } from "next";
 
-    if (!actualUser?.id || !actualUser?.emailAddresses?.[0]?.emailAddress) {
+export async function DELETE(req: NextApiRequest) {
+  const url = new URL(req.url!, "http://localhost:3000");
+  const linkIdstr = url.pathname.split("/").pop();
+  const linkId = Number(linkIdstr);
+  console.log("delete id:", linkId);
+  const { sessionId } = auth();
+  const actualUser = await currentUser();
+
+  const session = sessionId
+    ? await clerkClient.sessions.getSession(sessionId)
+    : null;
+  const userId = session?.userId;
+
+  try {
+    if (!userId || !actualUser?.emailAddresses?.[0]?.emailAddress) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    const urlId = Number(params.id);
-    const userId = String(actualUser.id);
 
     await prisma.url.delete({
       where: {
-        userId_id: {
-          userId,
-          id: urlId,
-        },
+        id: linkId,
       },
     });
-
+    // console.log(null, { status: 204 });
     return new NextResponse(null, { status: 204 });
   } catch (error: any) {
     if (error.code === "P2025") {
-      return new NextResponse("No url was found with that id", {
+      return new NextResponse("URL not found", {
         status: 404,
       });
     }
-    console.log("delete endpoint error", error);
-    return new NextResponse("delete endpoint error", { status: 500 });
+    console.log("delete endpoint error:", error);
+    return new NextResponse("delete endpoint error:" + error, { status: 500 });
   }
 }
