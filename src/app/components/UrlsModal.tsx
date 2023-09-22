@@ -65,7 +65,11 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
         });
         const resultData = await res.json();
         console.log("resultData", resultData);
-
+        if (resultData.code === "P2025") {
+          toast.error("Not found in database" + resultData.code);
+          console.log(resultData.meta);
+          return;
+        }
         if (resultData.error) {
           toast.error("Error creating short url:" + resultData.error.message);
           console.log(resultData.error);
@@ -89,7 +93,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
       <Dialog>
         <DialogTrigger asChild>
           <Button onClick={() => setShowDialog(true)} variant="outline">
-            Crear Enlaces
+            Create Links
           </Button>
         </DialogTrigger>
         {showDialog && (
