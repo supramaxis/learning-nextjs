@@ -8,12 +8,13 @@ import { auth } from "@clerk/nextjs";
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { url, customCode } = body;
-  const { userId, sessionId } = auth();
+  const { sessionId } = auth();
   const session = sessionId
     ? await clerkClient.sessions.getSession(sessionId)
     : null;
   console.log(`Session: ${JSON.stringify(session)}`);
   let shortUrl = customCode;
+  const userId = session?.userId;
 
   if (!userId) {
     return (
@@ -35,15 +36,17 @@ export async function POST(req: NextRequest) {
         externalId: userId,
       },
     });
-    if (!user) {
+    if (!userId) {
       return NextResponse.json(
         { error: "No user found" },
-        { status: 401, headers: { "Content-Type": "application/json" } }
+        { status: 404, headers: { "Content-Type": "application/json" } }
       );
     }
 
     if (session) {
       const userId = session.userId;
+      console.log("user?.id", user?.id);
+      console.log("url.id?", url);
       if (userId) {
         const data = await prisma.url.create({
           data: {
@@ -51,7 +54,7 @@ export async function POST(req: NextRequest) {
             shortUrl,
             user: {
               connect: {
-                id: user.id,
+                externalId: user?.externalId,
               },
             },
           },

@@ -9,10 +9,10 @@ export async function GET() {
       console.log("Unauthorized");
       return new NextResponse("Unauthorized", { status: 401 });
     } else {
-      const userId = actualUser.id;
+      const externalId = actualUser.id;
       const urls = await prisma.url.findMany({
         where: {
-          userId,
+          externalId,
         },
       });
       return NextResponse.json(urls);
