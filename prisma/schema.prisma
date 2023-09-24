@@ -3,15 +3,17 @@
 
 generator client {
   provider = "prisma-client-js"
+  // previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // extensions = [pgcrypto]
 }
 
 model Url {
-  id         Int       @id @default(autoincrement())
+  id         String    @id @default(dbgenerated("concat('link_', substring(md5(random()::text), 0, 10))"))
   url        String
   shortUrl   String?   @unique
   customCode String?   @unique
