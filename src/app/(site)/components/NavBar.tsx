@@ -2,7 +2,7 @@ import { UserButton } from "@clerk/nextjs";
 
 const NavBar = () => {
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end p-2">
       <UserButton />
     </div>
   );
