@@ -31,11 +31,11 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const user = await prisma.clerkUser.findUnique({
-      where: {
-        externalId: userId,
-      },
-    });
+    // const user = await prisma.clerkUser.findUnique({
+    //   where: {
+    //     externalId: userId,
+    //   },
+    // });
     if (!userId) {
       return NextResponse.json(
         { error: "No user found" },
@@ -45,8 +45,6 @@ export async function POST(req: NextRequest) {
 
     if (session) {
       const userId = session.userId;
-      console.log("user?.id", user?.id);
-      console.log("url.id?", url);
       if (userId) {
         const data = await prisma.url.create({
           data: {
@@ -54,7 +52,7 @@ export async function POST(req: NextRequest) {
             shortUrl,
             user: {
               connect: {
-                externalId: user?.externalId,
+                externalId: session.userId,
               },
             },
           },
