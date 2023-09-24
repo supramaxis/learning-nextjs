@@ -8,8 +8,6 @@ import type { NextApiRequest } from "next";
 export async function DELETE(req: NextApiRequest) {
   const url = new URL(req.url!, "http://localhost:3000");
   const linkIdstr = url.pathname.split("/").pop();
-  const linkId = Number(linkIdstr);
-  console.log("delete id:", linkId);
   const { sessionId } = auth();
   const actualUser = await currentUser();
 
@@ -25,7 +23,7 @@ export async function DELETE(req: NextApiRequest) {
 
     await prisma.url.delete({
       where: {
-        id: linkId,
+        id: linkIdstr,
       },
     });
     // console.log(null, { status: 204 });
