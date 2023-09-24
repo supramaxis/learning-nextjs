@@ -1,16 +1,13 @@
 import React from "react";
-import Head from "next/head";
 
 const LandingPage: React.FC = () => {
   return (
     <>
-      <Head>
-        <title>My Landing Page</title>
-        <meta name="description" content="Welcome to my landing page" />
-      </Head>
       <div>
-        <h1>Welcome to my landing page</h1>
-        <p>Thanks for visiting!</p>
+        <h1 className="flex justify-center items-center h-full">
+          Welcome to my landing page
+        </h1>
+        <p className="flex justify-center items-center">Thanks for visiting!</p>
       </div>
     </>
   );
