@@ -8,6 +8,8 @@ import type { NextApiRequest } from "next";
 export async function DELETE(req: NextApiRequest) {
   const url = new URL(req.url!, "http://localhost:3000");
   const linkIdstr = url.pathname.split("/").pop();
+  console.log(url);
+  console.log(linkIdstr);
   const { sessionId } = auth();
   const actualUser = await currentUser();
 
