@@ -3,6 +3,7 @@
  * Uses the `UrlsContext` to retrieve the list of URLs and the `UrlsModal` component to create new URLs.
  * Redirects to the login page if the user is not authenticated.
  * @returns A React component that renders the Shorten page.
+ * 
  */
 
 // shorten.tsx
