@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <ClerkProvider appearance={{ baseTheme: dark }}>
+          <ClerkProvider>
             <UrlsContextProvider>
               <ToasterContext />
               {children}
