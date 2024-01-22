@@ -7,7 +7,7 @@ interface Params {
   id: string;
 }
 
-export default function ShortIdPage({ params }: { params: Params }) {
+export default function RedirectPage({ params }: { params: Params }) {
     const { id } = params;
 
     //make the redirection to the long url
