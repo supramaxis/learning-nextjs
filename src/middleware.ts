@@ -1,5 +1,5 @@
-import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
-import { NextRequest, NextResponse } from "next/server";
+import { authMiddleware } from "@clerk/nextjs";
+import { NextResponse } from "next/server";
 
 export default authMiddleware({
   publicRoutes: [
@@ -7,8 +7,8 @@ export default authMiddleware({
     "/register",
     "/api/webhooks/users",
     "/",
-    "/ts",
-    "/sotd",
+    "/api/demo",
+    "/demo/go/:slug",
   ],
   afterAuth(auth, req, evt) {
     if (!auth.userId && !auth.isPublicRoute) {
@@ -19,5 +19,5 @@ export default authMiddleware({
 });
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/((?!.*\\..*|_next).*)", "/(api|trpc)(.*)"],
 };
