@@ -16,31 +16,36 @@ import Link from "next/link";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { mutate } from "swr";
-import { useUrlStore } from "@/store/urls-store";
 import DataTableRowActions from "@/components/DataTableRowActions"
 
 
 
-const getTimeAgoLabel = (dateString: string, currentTime: Date) => {
+const getTimeAgoLabel = (dateString: string) => {
   const now = new Date();
   const date = new Date(dateString);
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  let diffInMilliseconds = now.getTime() - date.getTime();
 
-  if (diffInSeconds < 60) {
-    return `${diffInSeconds} seconds ago`;
-  } else if (diffInSeconds < 3600) {
-    const minutes = Math.floor(diffInSeconds / 60);
-    return `${minutes} minutes ago`;
-  } else if (diffInSeconds < 86400) {
-    const hours = Math.floor(diffInSeconds / 3600);
-    return `${hours} hours ago`;
-  } else if (diffInSeconds < 2592000) {
-    const days = Math.floor(diffInSeconds / 86400);
-    return `${days} days ago`;
-  } else if (diffInSeconds < 31536000) {
-    const months = Math.floor(diffInSeconds / 2592000);
-    return `${months} months ago`;
+  const intervals = [
+    { unit: 'second', milliseconds: 1000 },
+    { unit: 'minute', milliseconds: 60000 },
+    { unit: 'hour', milliseconds: 3600000 },
+    { unit: 'day', milliseconds: 86400000 },
+    { unit: 'month', milliseconds: 2592000000 }, // Assuming 30 days for a month average
+  ];
+
+  for (let i = intervals.length - 1; i >= 0; i--) {
+    const interval = intervals[i];
+    const elapsed = Math.floor(diffInMilliseconds / interval.milliseconds);
+    if (elapsed > 0) {
+      
+      return `${elapsed} ${interval.unit}${elapsed > 1 ?  's' : ''} ago`;
+    }
+    diffInMilliseconds %= interval.milliseconds;
+    
   }
+
+  // If no interval matches, return an appropriate message (optional)
+  return 'Just now';
 };
 
 export const columns: ColumnDef<DataItem>[] = [
@@ -72,12 +77,12 @@ export const columns: ColumnDef<DataItem>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Created At",
+    header: "Created",
     cell: ({ row }) => {
       const { createdAt } = row.original;
       return (
         <span className="text-sm">
-          {getTimeAgoLabel(createdAt, new Date())}
+          {getTimeAgoLabel(createdAt)}
         </span>
       );
     },

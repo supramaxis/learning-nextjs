@@ -3,39 +3,46 @@
 import { useEffect, useState } from "react";
 
 const getTimeAgoLabel = (dateString: string, currentTime: Date) => {
-  if (!dateString || !currentTime) {
-    return "";
-  }
+  if (!dateString || !currentTime) return "";
+  
   const now = new Date();
   const date = new Date(dateString);
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  let diffInMilliSeconds = now.getTime() - date.getTime();
 
-  if (diffInSeconds < 60) {
-    return `${diffInSeconds} seconds ago`;
-  } else if (diffInSeconds < 3600) {
-    const minutes = Math.floor(diffInSeconds / 60);
-    return `${minutes} minutes ago`;
-  } else if (diffInSeconds < 86400) {
-    const hours = Math.floor(diffInSeconds / 3600);
-    return `${hours} hours ago`;
-  } else if (diffInSeconds < 2592000) {
-    const days = Math.floor(diffInSeconds / 86400);
-    return `${days} days ago`;
-  } else if (diffInSeconds < 31536000) {
-    const months = Math.floor(diffInSeconds / 2592000);
-    return `${months} months ago`;
+  const intervals = [
+    { unit: 'second', amount: 60 },
+    { unit: 'minute', amount: 60 },
+    { unit: 'hour', amount: 24 },
+    { unit: 'day', amount: 30 }, // Assuming 30 days for a month average
+    { unit: 'month', amount: 12 }
+  ]
+
+  for (const interval of intervals) {
+    const value = Math.floor(diffInMilliSeconds / interval.amount);
+    if (value > 0) {
+      return `${value} ${interval.unit}${value > 1 ? 's' : ''} ago`
+    }
+    diffInMilliSeconds %= interval.amount
   }
-  return "";
+
+
 };
 
 export const useTimeAgoLabel = (dateString: string, currentTime: Date) => {
-  const [timeAgoLabel, setTimeAgoLabel] = useState("");
+  interface timeAgoProps {
+    timeAgoLabel: string
+    
+  }
+  const [timeAgoLabel, setTimeAgoLabel] = useState<timeAgoProps>({
+    timeAgoLabel: "",
+  });
 
   useEffect(() => {
     const updateTimeAgo = () => {
       const currentTime = new Date();
       const timeAgo = getTimeAgoLabel(dateString, currentTime);
-      setTimeAgoLabel(timeAgo);
+      setTimeAgoLabel((prevState) => ({...prevState, timeAgoLabel: timeAgo || ""}));
 
       const interval = setInterval(updateTimeAgo, 1000);
       updateTimeAgo();
