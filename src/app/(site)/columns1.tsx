@@ -16,7 +16,6 @@ import Link from "next/link";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { mutate } from "swr";
-import { useUrlStore } from "@/store/urls-store";
 
 
 
@@ -93,9 +92,9 @@ export const columns: ColumnDef<DataItem>[] = [
           const ogUrl = res.data;
           console.log(res.data)
           const url = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${ogUrl}`;
-          useUrlStore.getState().setQRCodeLink(url);
-          const qrCodeLink = useUrlStore.getState().qrCodeLink
-          console.log(qrCodeLink)
+          // useUrlStore.getState().setQRCodeLink(url);
+          // const qrCodeLink = useUrlStore.getState().qrCodeLink
+          console.log("")
         } catch (error) {
           console.log(error);
         }
