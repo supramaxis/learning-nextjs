@@ -14,4 +14,4 @@ To get started with this project, you'll need to have Node.js and a PostgreSQL d
 
 ## Usage
 
-Once the development server is running, you can access the web app at `http://localhost:3000`. From there, you can try the demo or login and click the create links button. The shortened URL will be displayed on the page.
+Once the development server is running, you can access the web app at `http://localhost:3000`. From there, you can try the demo or login and create a link. The shortened URL will be displayed on the page.

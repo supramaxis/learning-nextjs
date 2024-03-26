@@ -92,7 +92,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button onClick={() => setShowDialog(true)} variant="outline">
+          <Button onClick={() => setShowDialog(true)} variant="secondary">
             Create Links
           </Button>
         </DialogTrigger>
@@ -119,7 +119,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
                           <FormItem>
                             <FormLabel>URL</FormLabel>
                             <FormControl>
-                              <Input placeholder="A Long URL" {...field} />
+                              <Input placeholder="A Long URL" {...field} defaultValue=''/>
                             </FormControl>
                             <FormDescription>
                               Enter a valid URL to shorten

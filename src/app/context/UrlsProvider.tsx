@@ -21,7 +21,7 @@ export const UrlsContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [urls, setUrls] = useState<Url[]>([]);
-  const { data, error } = useSWR<DataItem[]>("/api/urls", fetcher);
+  const { data, error } = useSWR<DataItem[]>("/api/get/urls", fetcher);
   const { session } = useSession();
 
   return (
@@ -33,7 +33,7 @@ export const UrlsContextProvider = ({
         data,
         error,
         setUrls,
-        handleUrlDeleted(deletedId) {},
+        handleUrlDeleted(deleteId) {},
       }}
     >
       {children}

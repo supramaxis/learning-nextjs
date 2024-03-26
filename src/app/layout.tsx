@@ -1,9 +1,8 @@
-import ToasterContext from "./context/ToasterContext";
 import "./globals.css";
+import ToasterContext from "./context/ToasterContext";
 import { UrlsContextProvider } from "./context/UrlsProvider";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
 
 export const metadata = {
   title: "Nexjs + Clerk + Prisma",
