@@ -1,7 +1,7 @@
 //@tanstack/react-table columns definitions
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, useReactTable } from "@tanstack/react-table";
 import { LuMoreHorizontal, LuArrowDown, LuExternalLink } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +16,10 @@ import Link from "next/link";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { mutate } from "swr";
+import { useUrlStore } from "@/store/urls-store";
+import DataTableRowActions from "@/components/DataTableRowActions"
+
+
 
 const getTimeAgoLabel = (dateString: string, currentTime: Date) => {
   const now = new Date();
@@ -81,39 +85,6 @@ export const columns: ColumnDef<DataItem>[] = [
   {
     id: "actions",
     header: "Actions",
-    cell: ({ row }) => {
-      const { id } = row.original;
-      const handleDelete = async () => {
-        try {
-          const res = await axios.delete(`/api/delete/${id}`);
-          console.log(res.data);
-          toast.success("Url has been deleted");
-          mutate("/api/urls");
-        } catch (error: any) {
-          console.log(error);
-          if (error.response) {
-            toast.error(error.response.data);
-          }
-        }
-      };
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open Menu</span>
-              <LuMoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
-            <DropdownMenuItem className="cursor-pointer" onClick={handleDelete}>
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];
