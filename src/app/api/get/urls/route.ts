@@ -18,7 +18,7 @@ export async function GET() {
       return NextResponse.json(urls);
     }
   } catch (error) {
-    console.log("ERROR_MESSAGE FROM API/URLS", error);
-    return new NextResponse("ERROR_MESSAGE FROM API/URLS", { status: 500 });
+    console.log("ERROR_MESSAGE FROM API/URLS ENDPOINT", error);
+    return new NextResponse("ERROR_MESSAGE FROM API/URLS ENDPOINT", { status: 500 });
   }
 }
