@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Row } from "@tanstack/react-table";
 import { toast } from "react-hot-toast";
 import { mutate } from "swr";
-import { useUrlStore } from "@/store/urls-store";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LuMoreHorizontal, LuArrowDown, LuExternalLink } from "react-icons/lu";
+import { LuMoreHorizontal } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import QrCard from "./QrCard";
 import QRCode from "qrcode";
@@ -22,15 +21,16 @@ interface DataTableRowActionsProps<TData> {
 
 const ActionsCell = <TData,>({ row }: DataTableRowActionsProps<TData>) => {
   const [showQrCard, setShowQrCard] = useState(false);
-  const [qrCodeLink, setQRCodeLink] = useState("");
+  const [qrCodeData, setQRCodeData] = useState("");
   const { id } = row.original as Row<TData>;
 
   const handleCreateQR = async () => {
     try {
+      setQRCodeData("")
       const res = await axios.get(`/api/get/url/${id}`);
       const ogUrl = res.data;
       const url = await QRCode.toDataURL(ogUrl);
-      setQRCodeLink(url);
+      setQRCodeData(url);
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +67,7 @@ const ActionsCell = <TData,>({ row }: DataTableRowActionsProps<TData>) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {showQrCard && <QrCard qrCodeLink={qrCodeLink} />}
+      {showQrCard && <QrCard qrCodeData={qrCodeData} />}
     </>
   );
 };

@@ -11,12 +11,9 @@ import {
 import { Button } from "./ui/button";
 import Image from "next/image";
 
-const QrCard = ({ qrCodeLink }: { qrCodeLink: string }) => {
-  const [showDialog, setShowDialog] = useState(false);
+const QrCard = ({ qrCodeData }: { qrCodeData: any }) => {
 
-  const handleOpenDialog = () => {
-    setShowDialog(true);
-  };
+  if(!qrCodeData) return null;
 
   return (
     <>
@@ -39,7 +36,7 @@ const QrCard = ({ qrCodeLink }: { qrCodeLink: string }) => {
 
           <div className="flex justify-center items-center ">
             <div className="grid gap-4">
-              <Image src={qrCodeLink} width={150} height={150} alt="QR Code" />
+              <Image src={qrCodeData} width={150} height={150} alt="QR Code" />
             </div>
           </div>
           <DialogFooter></DialogFooter>
