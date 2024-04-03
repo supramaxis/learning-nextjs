@@ -46,6 +46,22 @@ export async function POST(req: NextRequest) {
     if (session) {
       const userId = session.userId;
       if (userId) {
+        if (customCode) {
+          const existingUrl = await prisma.url.findFirst({
+            where: {shortUrl: customCode}
+          })
+
+          if (existingUrl) {
+            return NextResponse.json({error: {
+              message: "Custom code already exists"
+            }}, {
+              status: 409,
+              headers: {"Content-Type": "application/json"}
+            })
+          }
+        }
+
+
         const data = await prisma.url.create({
           data: {
             url,
