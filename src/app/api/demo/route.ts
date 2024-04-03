@@ -7,8 +7,6 @@ export async function POST(req: NextRequest) {
   const { url } = body;
   const slug = Math.random().toString(36).substring(2, 7);
 
-  
-
   try {
     const data = {
       url,
