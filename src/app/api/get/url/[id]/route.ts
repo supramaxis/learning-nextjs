@@ -19,9 +19,7 @@ export async function GET(req: NextApiRequest) {
   const userId = session?.userId;
 
   try {
-    if (!userId || !actualUser?.emailAddresses?.[0]?.emailAddress) {
-      return new NextResponse("Unauthorized", { status: 401 });
-    }
+    if (!userId || !actualUser?.emailAddresses?.[0]?.emailAddress) return new NextResponse("Unauthorized", { status: 401 });
 
     const singleUrl = await prisma.url.findFirst({
       where: {
@@ -31,11 +29,8 @@ export async function GET(req: NextApiRequest) {
     // console.log(null, { status: 204 });
     return NextResponse.json(singleUrl?.url, {status: 200});
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return new NextResponse("URL not found", {
-        status: 404,
-      });
-    }
+    if (error.code === "P2025") return new NextResponse("URL not found", {status: 404});
+    
     console.log("delete endpoint error:", error);
     return new NextResponse("delete endpoint error:" + error, { status: 500 });
   }

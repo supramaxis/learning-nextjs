@@ -24,9 +24,8 @@ const getTimeAgoLabel = (dateString: string) => {
   for (let i = intervals.length - 1; i >= 0; i--) {
     const interval = intervals[i];
     const elapsed = Math.floor(diffInMilliseconds / interval.milliseconds);
-    if (elapsed > 0) {
-      return `${elapsed} ${interval.unit}${elapsed > 1 ? "s" : ""} ago`;
-    }
+    if (elapsed > 0) return `${elapsed} ${interval.unit}${elapsed > 1 ? "s" : ""} ago`;
+  
     diffInMilliseconds %= interval.milliseconds;
   }
 

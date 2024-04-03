@@ -26,16 +26,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  if (!shortUrl) {
-    shortUrl = Math.random().toString(36).substring(2, 7);
-  }
+  if (!shortUrl) shortUrl = Math.random().toString(36).substring(2, 7);
 
   try {
-    // const user = await prisma.clerkUser.findUnique({
-    //   where: {
-    //     externalId: userId,
-    //   },
-    // });
     if (!userId) {
       return NextResponse.json(
         { error: "No user found" },
