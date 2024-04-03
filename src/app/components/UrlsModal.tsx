@@ -47,6 +47,8 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
     resolver: zodResolver(FormSchema),
   });
 
+  const {isSubmitting} = form.formState
+
   const onSubmitForm = form.handleSubmit(
     async (data: z.infer<typeof FormSchema>) => {
       try {
@@ -71,7 +73,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
           return;
         }
         if (resultData.error) {
-          toast.error("Error creating short url:" + resultData.error.message);
+          toast.error(resultData.error.message);
           console.log(resultData.error);
           return;
         }
@@ -119,7 +121,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
                           <FormItem>
                             <FormLabel>URL</FormLabel>
                             <FormControl>
-                              <Input placeholder="A Long URL" {...field} defaultValue=''/>
+                              <Input placeholder="A Long URL" {...field} value={field.value || ""} onChange={(e) => {field.onChange(e.target.value || "")}}/>
                             </FormControl>
                             <FormDescription>
                               Enter a valid URL to shorten
@@ -136,7 +138,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
                           <FormItem>
                             <FormLabel>Custom code</FormLabel>
                             <FormControl>
-                              <Input placeholder="Short Code" {...field} />
+                              <Input placeholder="Short Code" {...field} value={field.value || ""} />
                             </FormControl>
                             <FormDescription>
                               Optional: enter a custom code for your short URL
@@ -146,7 +148,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
                         </>
                       )}
                     />
-                    <Button type="submit">Submit</Button>
+                    <Button type="submit" disabled={isSubmitting}>Submit</Button>
                   </form>
                 </Form>
               </div>
