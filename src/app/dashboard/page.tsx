@@ -11,7 +11,7 @@
 import { useContext, useState, useEffect } from "react";
 import UrlsModal from "@/components/UrlsModal";
 import UrlsContext from "@/context/UrlsContext";
-import { DataItem } from "@/types";
+import type { DataItem } from "@/types";
 import { DataTable } from "@/components/DataTable";
 import { columns } from "@/(site)/columns";
 import NavigationMenuBar from "@/(site)/components/NavBar";
@@ -19,7 +19,7 @@ import NavigationMenuBar from "@/(site)/components/NavBar";
 export default function Shorten() {
   const [urls, setUrls] = useState<DataItem[]>([]);
   const { data } = useContext(UrlsContext);
-
+  
   useEffect(() => {
     if (data) setUrls(data);
   }, [data]);
