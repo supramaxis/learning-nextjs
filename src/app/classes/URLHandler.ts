@@ -1,12 +1,11 @@
 import prisma from "@/lib/prismadb";
 import { NextResponse } from "next/server";
-import { User, currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { clerkClient } from "@clerk/nextjs/server";
 import { auth } from "@clerk/nextjs/server";
-import type { NextApiRequest } from "next";
 
 export class URLHandler {
-  constructor(private req: NextApiRequest) {}
+  constructor(private req: Request) {}
 
   async authenticate() {
     const { sessionId } = auth();
@@ -19,13 +18,56 @@ export class URLHandler {
     return { actualUser, userId };
   }
 
+  async createShortUrl() {
+    const { userId } = await this.authenticate();
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const body = await this.req.json();
+    const { url, customCode } = body;
+    let shortUrl = customCode || Math.random().toString(36).substring(2, 7);
+
+    try {
+      if (customCode) {
+        const existingUrl = await prisma.url.findFirst({
+          where: { shortUrl: customCode },
+        });
+
+        if (existingUrl) {
+          return new NextResponse("URL already exists", {
+            status: 400,
+          });
+        }
+      }
+
+      const data = await prisma.url.create({
+        data: {
+          url,
+          shortUrl,
+          user: {
+            connect: { externalId: userId },
+          },
+        },
+      });
+
+      return new NextResponse(JSON.stringify(data), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      return new NextResponse("Error creating a short url", { status: 500 });
+    }
+  }
+
   async getURL() {
     const { actualUser, userId } = await this.authenticate();
 
-    // const { actualUser, userId } = authResult;
     const url = new URL(this.req.url!, "http://localhost:3000");
     const linkIdstr = url.pathname.split("/").pop();
-    // console.log(url);
     console.log(linkIdstr);
 
     if (!userId || !actualUser?.emailAddresses?.[0]?.emailAddress)
@@ -37,7 +79,6 @@ export class URLHandler {
           id: linkIdstr,
         },
       });
-      // console.log(null, { status: 204 });
       return NextResponse.json(singleUrl?.url, { status: 200 });
     } catch (error: any) {
       if (error.code === "P2025")
@@ -73,19 +114,18 @@ export class URLHandler {
   async deleteUrl() {
     const url = new URL(this.req.url!, "http://localhost:3000");
     const linkIdstr = url.pathname.split("/").pop();
-    // console.log(url);
     console.log(linkIdstr);
-    const {actualUser, userId} = await this.authenticate();
+    const { actualUser, userId } = await this.authenticate();
 
     try {
-      if (!userId || !actualUser?.emailAddresses?.[0]?.emailAddress) return new NextResponse("Unauthorized", { status: 401 });
+      if (!userId || !actualUser?.emailAddresses?.[0]?.emailAddress)
+        return new NextResponse("Unauthorized", { status: 401 });
 
       await prisma.url.delete({
         where: {
           id: linkIdstr,
         },
       });
-      // console.log(null, { status: 204 });
       return new NextResponse(null, { status: 204 });
     } catch (error: any) {
       if (error.code === "P2025")
@@ -97,9 +137,4 @@ export class URLHandler {
       });
     }
   }
-}
-
-interface AuthResult {
-  actualUser?: any;
-  userId?: string;
 }
