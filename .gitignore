@@ -16,7 +16,7 @@ pnpm-lock.yaml
 
 # production
 /build
-
+pnpm-lock.yaml
 # misc
 .DS_Store
 *.pem
