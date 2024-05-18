@@ -1,24 +1,12 @@
 //@tanstack/react-table columns definitions
 "use client";
 
-import { ColumnDef, useReactTable } from "@tanstack/react-table";
-import { LuMoreHorizontal, LuArrowDown, LuExternalLink } from "react-icons/lu";
+import { ColumnDef } from "@tanstack/react-table";
+import { LuArrowDown, LuExternalLink } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { DataItem } from "@/types";
 import Link from "next/link";
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import { mutate } from "swr";
-import DataTableRowActions from "@/components/DataTableRowActions"
-
-
+import DataTableRowActions from "@/components/DataTableRowActions";
 
 const getTimeAgoLabel = (dateString: string) => {
   const now = new Date();
@@ -26,26 +14,23 @@ const getTimeAgoLabel = (dateString: string) => {
   let diffInMilliseconds = now.getTime() - date.getTime();
 
   const intervals = [
-    { unit: 'second', milliseconds: 1000 },
-    { unit: 'minute', milliseconds: 60000 },
-    { unit: 'hour', milliseconds: 3600000 },
-    { unit: 'day', milliseconds: 86400000 },
-    { unit: 'month', milliseconds: 2592000000 }, // Assuming 30 days for a month average
+    { unit: "second", milliseconds: 1000 },
+    { unit: "minute", milliseconds: 60000 },
+    { unit: "hour", milliseconds: 3600000 },
+    { unit: "day", milliseconds: 86400000 },
+    { unit: "month", milliseconds: 2592000000 }, // Assuming 30 days for a month average
   ];
 
   for (let i = intervals.length - 1; i >= 0; i--) {
     const interval = intervals[i];
     const elapsed = Math.floor(diffInMilliseconds / interval.milliseconds);
-    if (elapsed > 0) {
-      
-      return `${elapsed} ${interval.unit}${elapsed > 1 ?  's' : ''} ago`;
-    }
+    if (elapsed > 0) return `${elapsed} ${interval.unit}${elapsed > 1 ? "s" : ""} ago`;
+  
     diffInMilliseconds %= interval.milliseconds;
-    
   }
 
-  // If no interval matches, return an appropriate message (optional)
-  return 'Just now';
+  // If no interval matches, an appropriate message is returned
+  return "Just Now";
 };
 
 export const columns: ColumnDef<DataItem>[] = [
@@ -77,14 +62,20 @@ export const columns: ColumnDef<DataItem>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Created",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created
+          <LuArrowDown className="h-4 w-4 ml-2" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const { createdAt } = row.original;
-      return (
-        <span className="text-sm">
-          {getTimeAgoLabel(createdAt)}
-        </span>
-      );
+      return <span className="text-sm">{getTimeAgoLabel(createdAt)}</span>;
     },
   },
   {

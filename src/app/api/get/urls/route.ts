@@ -1,24 +1,8 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prismadb";
-import { currentUser } from "@clerk/nextjs";
+import { URLHandler } from "@/classes/URLHandler";
+import { NextApiRequest } from "next";
 
-export async function GET() {
-  try {
-    const actualUser = await currentUser();
-    if (!actualUser?.id || !actualUser?.primaryEmailAddressId) {
-      console.log("Unauthorized");
-      return new NextResponse("Unauthorized", { status: 401 });
-    } else {
-      const externalId = actualUser.id;
-      const urls = await prisma.url.findMany({
-        where: {
-          externalId,
-        },
-      });
-      return NextResponse.json(urls);
-    }
-  } catch (error) {
-    console.log("ERROR_MESSAGE FROM API/URLS ENDPOINT", error);
-    return new NextResponse("ERROR_MESSAGE FROM API/URLS ENDPOINT", { status: 500 });
-  }
+export async function GET(req: Request) {
+  const handler = new URLHandler(req);
+  const response = await handler.getUrls();
+  return response;
 }

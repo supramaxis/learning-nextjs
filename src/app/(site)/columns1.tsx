@@ -110,9 +110,8 @@ export const columns: ColumnDef<DataItem>[] = [
           mutate("/api/get/urls");
         } catch (error: any) {
           console.log(error);
-          if (error.response) {
-            toast.error(error.response.data);
-          }
+          if (error.response) toast.error(error.response.data);
+          
         }
       };
 

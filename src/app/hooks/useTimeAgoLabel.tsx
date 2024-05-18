@@ -20,12 +20,9 @@ const getTimeAgoLabel = (dateString: string, currentTime: Date) => {
 
   for (const interval of intervals) {
     const value = Math.floor(diffInMilliSeconds / interval.amount);
-    if (value > 0) {
-      return `${value} ${interval.unit}${value > 1 ? 's' : ''} ago`
-    }
+    if (value > 0) return `${value} ${interval.unit}${value > 1 ? 's' : ''} ago`
     diffInMilliSeconds %= interval.amount
   }
-
 
 };
 

@@ -25,10 +25,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   render(): ReactNode {
-    if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
-    }
+    if (this.state.hasError) return <h1>Something went wrong.</h1>;  // You can render any custom fallback UI 
 
     return this.props.children;
   }

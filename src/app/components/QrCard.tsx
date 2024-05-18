@@ -11,7 +11,11 @@ import {
 import { Button } from "./ui/button";
 import Image from "next/image";
 
-const QrCard = ({ qrCodeData }: { qrCodeData: any }) => {
+interface QrCardProps {
+  qrCodeData: any;
+}
+
+const QrCard = ({ qrCodeData }: QrCardProps) => {
 
   if(!qrCodeData) return null;
 
