@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from '@/lib/prismadb'
 import { redirect } from "next/navigation";
 
 interface Params {
@@ -6,7 +6,6 @@ interface Params {
 }
 
 export default async function ShortIdPage({ params }: { params: Params }) {
-  const prisma = new PrismaClient();
   const { id } = params;
 
   //make the redirection to the long url

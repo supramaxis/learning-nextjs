@@ -1,8 +1,8 @@
-'use client';
+"use client";
 // context/UrlsContext.tsx
 
-import { createContext } from 'react';
-import { UrlsContextType } from '@/types';
+import { createContext } from "react";
+import { UrlsContextType } from "@/types";
 
 export const UrlsContext = createContext<UrlsContextType>({
   urls: [],
@@ -11,8 +11,7 @@ export const UrlsContext = createContext<UrlsContextType>({
   data: undefined,
   error: undefined,
   setUrls: () => null,
-  handleUrlDeleted: () => null // Add handleUrlDeleted with empty function
+  handleUrlDeleted: () => {},
 });
 
 export default UrlsContext;
-

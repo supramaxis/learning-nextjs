@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+server
+pnpm-lock.yaml
 
 # testing
 /coverage
@@ -19,6 +21,7 @@ pnpm-lock.yaml
 .DS_Store
 *.pem
 .vscode
+empty.json
 
 # debug
 npm-debug.log*

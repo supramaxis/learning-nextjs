@@ -3,73 +3,215 @@
  * Uses the `UrlsContext` to retrieve the list of URLs and the `UrlsModal` component to create new URLs.
  * Redirects to the login page if the user is not authenticated.
  * @returns A React component that renders the Shorten page.
+ *
  */
 
 // shorten.tsx
 "use client";
-import { useContext, useState, useEffect } from "react";
-import UrlsModal from "@/components/UrlsModal";
-import UrlsContext from "@/context/UrlsContext";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { DataItem } from "@/types";
-import { DataTable } from "@/components/DataTable";
-import { columns } from "@/(site)/columns";
-import NavigationMenuBar from "./components/NavBar";
-("@/(site)/components/NavBar");
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+import NavigationMenuBar from "@/(site)/components/NavBar";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-hot-toast";
+import { Label } from "@/components/ui/label";
+import { Copy } from "lucide-react";
+import { useUrlsStore } from "@/store/urls-store";
+
+const FormSchema = z.object({
+  url: z.string().url({
+    message: "Please enter a valid URL.",
+  }),
+  slug: z
+    .string()
+    .regex(/^[a-z0-9-]+$/i, {
+      message:
+        "Please enter a valid slug using only lowercase letters, numbers or hyphens.",
+    })
+    .optional(),
+});
 
 export default function Shorten() {
-  const [urls, setUrls] = useState<DataItem[]>([]);
+  const [showDialog, setShowDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [newUrl, setNewUrl] = useState("");
+  const [urlMapping, setUrlMapping] = useState({});
 
-  const { data } = useContext(UrlsContext);
-  const { data: session } = useSession();
-  const router = useRouter();
+  const { setUrl } = useUrlsStore();
 
-  useEffect(() => {
-    if (data) setUrls(data);
-  }, [data]);
-
-  const handleUrlCreated = (url: DataItem) => {
-    setUrls([...urls, url]);
+  const handleCopyLink = () => {
+    try {
+      navigator.clipboard.writeText(newUrl);
+      console.log("copied");
+    } catch (error) {
+      console.log("Error copying link:", error);
+    }
   };
 
-  useEffect(() => {
-    if (!session?.user.email) router.push("/login");
-  }, [session]);
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      url: "",
+    },
+  });
 
-  /* The code block is determining the content to be rendered based on the value of the `data` variable. */
-  let content;
-  try {
-    if (data === undefined) {
-      content = <p className="flex items-center justify-center">Loading...</p>;
-    } else if (data.length === 0) {
-      content = (
-        <p className="flex items-center justify-center">
-          No hay urls para mostrar
-        </p>
-      );
-    } else {
-      content = <DataTable<DataItem, unknown> columns={columns} data={urls} />;
+  const onSubmitForm = form.handleSubmit(
+    async (data: z.infer<typeof FormSchema>) => {
+      try {
+        setLoading(true);
+        const url = data.url;
+        const customCode = data.slug || "";
+
+        //fetch the api endpoint to create a short url using async await
+
+        const res = await fetch("/api/demo", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ url }),
+        });
+
+        const resultData = await res.json();
+        console.log("resultData", resultData);
+        if (resultData.code === "P2025") {
+          toast.error("Not found in database: " + resultData.code);
+          console.log(resultData.meta);
+          return;
+        }
+        if (resultData.error) {
+          toast.error("Error creating short url:" + resultData.error.message);
+          console.log(resultData.error);
+          return;
+        }
+        if (res.status === 200) {
+          setIsOpen(true);
+          const newUrl = `${window.location.origin}/demo/go/${resultData.slug}`;
+          setNewUrl(newUrl);
+
+          sessionStorage.setItem(resultData.slug, resultData.url);
+
+        } else {
+          console.error("POST /api/demo failed", res);
+        }
+        
+        
+        
+        setUrl(resultData.url);
+        console.log("STORE URL: ", url);
+        console.log("newUrl", newUrl);
+        setUrlMapping(prevMapping => ({ ...prevMapping, [resultData.slug]: resultData.url }));
+
+        setLoading(false);
+        // onUrlCreated(resultData);
+        setShowDialog(false);
+        form.reset();
+      } catch (error: any) {
+        console.error(error);
+        setLoading(false);
+        toast.error("Error creating short url" + error.message);
+      }
     }
-  } catch (error) {
-    console.log(error);
-  }
+  );
 
   return (
     <>
       <NavigationMenuBar />
       <div className="text-zinc-200">
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-          <div className="">
-            <h1 className="text-3xl font-bold text-zinc-200">
-              Shorten your links
-            </h1>
-          </div>
-          {content}
-          <div className="flex justify-center">
-            <UrlsModal onUrlCreated={handleUrlCreated} />
-          </div>
+          <h1 className="text-3xl font-bold text-zinc-200">
+            Shorten your links
+          </h1>
         </main>
+
+        <div className="flex justify-center items-center">
+          <div className="py-36">
+            <Form {...form}>
+              <form onSubmit={onSubmitForm} className="space-y-8 flex flex-col">
+                <FormField
+                  control={form.control}
+                  name="url"
+                  render={({ field }) => (
+                    <>
+                      <FormItem>
+                        <FormLabel>URL</FormLabel>
+                        <FormControl>
+                          <Input placeholder="A Long URL" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          Enter a valid URL to shorten
+                        </FormDescription>
+                      </FormItem>
+                    </>
+                  )}
+                />
+                <Button type="submit">Submit</Button>
+              </form>
+            </Form>
+            <>
+              <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                {/* <DialogTrigger asChild>
+                  <Button variant="outline">Share</Button>
+                </DialogTrigger> */}
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Share link</DialogTitle>
+                    <DialogDescription>
+                      Anyone who has this link will be able to view this.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex items-center space-x-2">
+                    <div className="grid flex-1 gap-2">
+                      <Label htmlFor="link" className="sr-only">
+                        Link
+                      </Label>
+                      <Input id="link" defaultValue={newUrl} readOnly />
+                    </div>
+                    <Button
+                      onClick={handleCopyLink}
+                      type="submit"
+                      size="sm"
+                      className="px-3"
+                    >
+                      <span className="sr-only">Copy</span>
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <DialogFooter className="sm:justify-start">
+                    <DialogClose asChild>
+                      <Button type="button" variant="secondary">
+                        Close
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </>
+          </div>
+        </div>
       </div>
     </>
   );

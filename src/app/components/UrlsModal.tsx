@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-
 import { UrlsModalProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
@@ -65,9 +64,14 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
           body: JSON.stringify({ url, customCode }),
         });
         const resultData = await res.json();
-
+        console.log("resultData", resultData);
+        if (resultData.code === "P2025") {
+          toast.error("Not found in database" + resultData.code);
+          console.log(resultData.meta);
+          return;
+        }
         if (resultData.error) {
-          toast.error("Error creating short url" + resultData.error.message);
+          toast.error("Error creating short url:" + resultData.error.message);
           console.log(resultData.error);
           return;
         }
@@ -75,8 +79,11 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
         setLoading(false);
         onUrlCreated(resultData);
         setShowDialog(false);
-      } catch (error) {
+        form.reset();
+      } catch (error: any) {
         console.log(error);
+        setLoading(false);
+        toast.error("Error creating short url" + error.message);
       }
     }
   );
@@ -85,16 +92,16 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button onClick={() => setShowDialog(true)} variant="outline">
-            Crear Enlaces
+          <Button onClick={() => setShowDialog(true)} variant="secondary">
+            Create Links
           </Button>
         </DialogTrigger>
         {showDialog && (
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Acortar Enlaces</DialogTitle>
+              <DialogTitle>Create short URL</DialogTitle>
               <DialogDescription>
-                Crea enlaces cortos para compartir rapidamente
+                Create a short URL by entering a valid URL and an optional slug.
               </DialogDescription>
             </DialogHeader>
             <div className="flex justify-center items-center ">
@@ -112,7 +119,7 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
                           <FormItem>
                             <FormLabel>URL</FormLabel>
                             <FormControl>
-                              <Input placeholder="A Long URL" {...field} />
+                              <Input placeholder="A Long URL" {...field} defaultValue=''/>
                             </FormControl>
                             <FormDescription>
                               Enter a valid URL to shorten
@@ -127,12 +134,12 @@ const UrlsModal: React.FC<UrlsModalProps> = ({ onUrlCreated }) => {
                       render={({ field }) => (
                         <>
                           <FormItem>
-                            <FormLabel>Codigo personalizado</FormLabel>
+                            <FormLabel>Custom code</FormLabel>
                             <FormControl>
                               <Input placeholder="Short Code" {...field} />
                             </FormControl>
                             <FormDescription>
-                              Crea un codigo personalizado para este enlace
+                              Optional: enter a custom code for your short URL
                             </FormDescription>
                             <FormMessage />
                           </FormItem>

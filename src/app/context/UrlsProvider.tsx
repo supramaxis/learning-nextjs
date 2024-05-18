@@ -1,27 +1,28 @@
-'use client';
+"use client";
 //react context
 
-import { useState } from 'react';
-import { useSession } from 'next-auth/react';
-import useSWR from 'swr';
-import type { DataItem, Url } from '@/types';
-import { UrlsContext } from './UrlsContext';
-
+import { useState } from "react";
+import useSWR from "swr";
+import type { DataItem, Url } from "@/types";
+import { UrlsContext } from "./UrlsContext";
+import { useSession } from "@clerk/nextjs";
 
 const fetcher = async (url: string): Promise<DataItem[]> => {
+  console.log("fetching data", url);
   const res = await fetch(url);
   const data = await res.json();
+  console.log("finished fetching data", data);
   return data;
 };
 
 export const UrlsContextProvider = ({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) => {
   const [urls, setUrls] = useState<Url[]>([]);
-  const { data: session, status } = useSession();
-  const { data, error } = useSWR<DataItem[]>('/api/urls', fetcher);
+  const { data, error } = useSWR<DataItem[]>("/api/get/urls", fetcher);
+  const { session } = useSession();
 
   return (
     <UrlsContext.Provider
@@ -32,12 +33,12 @@ export const UrlsContextProvider = ({
         data,
         error,
         setUrls,
-        handleUrlDeleted(deletedId) {}
-      }}>
+        handleUrlDeleted(deleteId) {},
+      }}
+    >
       {children}
     </UrlsContext.Provider>
   );
 };
 
 export default UrlsContextProvider;
-

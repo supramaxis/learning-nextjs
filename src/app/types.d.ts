@@ -52,6 +52,7 @@ export type UrlsContextType = {
   data: DataItem[] | undefined;
   error: Error | undefined;
   setUrls: (urls: Url[]) => void;
-  handleUrlDeleted: (deletedId: number) => void; // Add handleUrlDeleted function
+  handleUrlDeleted: (deleteId: number) => void;
 };
+
 

@@ -1,39 +1,42 @@
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prismadb';
-import getCurrentUser from '@/actions/getCurrentUser';
+import prisma from "@/lib/prismadb";
+import { NextResponse, NextRequest } from "next/server";
+import { currentUser } from "@clerk/nextjs";
+import { clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs";
+import type { NextApiRequest } from "next";
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: number } }
-) {
+export async function DELETE(req: NextApiRequest) {
+  const url = new URL(req.url!, "http://localhost:3000");
+  const linkIdstr = url.pathname.split("/").pop();
+  // console.log(url);
+  console.log(linkIdstr);
+  const { sessionId } = auth();
+  const actualUser = await currentUser();
+
+  const session = sessionId
+    ? await clerkClient.sessions.getSession(sessionId)
+    : null;
+  const userId = session?.userId;
 
   try {
-    const currentUser = await getCurrentUser();
-
-    if (!currentUser?.id || !currentUser?.email) {
-      return new NextResponse('No autorizado', { status: 401 });
+    if (!userId || !actualUser?.emailAddresses?.[0]?.emailAddress) {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
-    const urlId = Number(params.id);
-    const userId = String(currentUser.id);
 
     await prisma.url.delete({
       where: {
-        userId_id: {
-          userId,
-          id: urlId
-        }
-      }
+        id: linkIdstr,
+      },
     });
-
+    // console.log(null, { status: 204 });
     return new NextResponse(null, { status: 204 });
   } catch (error: any) {
-    if (error.code === 'P2025') {
-      return new NextResponse('No se encontro una url con ese id', {
-        status: 404
+    if (error.code === "P2025") {
+      return new NextResponse("URL not found", {
+        status: 404,
       });
     }
-    console.log('ERROR_MESSAGE FROM API/URLS', error);
-    return new NextResponse('ERROR_MESSAGE FROM API/URLS', { status: 500 });
+    console.log("delete endpoint error:", error);
+    return new NextResponse("delete endpoint error:" + error, { status: 500 });
   }
 }
-
